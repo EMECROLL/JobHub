@@ -15,7 +15,7 @@ function SignUp() {
         <img src={LOGO} className='w-60 h-16'></img>
         <div className='h-500'>
         <form>
-          <div className="mb-4 mt-16">
+          <div className="mb-4 mt-4">
             <label htmlFor="nombre" className="block text-sm font-medium text-gray-600">
               Nombre(s):
             </label>
@@ -23,11 +23,11 @@ function SignUp() {
               type="text"
               id="nombre"
               name="nombre"
-              className="form-input"
+              className="mt-2 form-input focus:ring-2 focus:ring-blue-500 focus:border-transparent border-gray-300 rounded-md px-3 py-2 text-gray-800"
               placeholder="Maynor"
             />
           </div>
-          <div className="mb-4 mt-8">
+          <div className="mb-4 mt-4">
             <label htmlFor="apellido" className="block text-sm font-medium text-gray-600">
               Apellido(s):
             </label>
@@ -35,7 +35,7 @@ function SignUp() {
               type="text"
               id="apellido"
               name="apellido"
-              className="form-input"
+              className="mt-2 form-input focus:ring-2 focus:ring-blue-500 focus:border-transparent border-gray-300 rounded-md px-3 py-2 text-gray-800"
               placeholder="Bermón"
             />
           </div>
@@ -51,7 +51,7 @@ function SignUp() {
               placeholder="Ejemplo: ABCD123456EFG"
             />
           </div> */}
-          <div className="mb-4 mt-8">
+          <div className="mb-4 mt-4">
             <label htmlFor="correo" className="block text-sm font-medium text-gray-600">
               Correo:
             </label>
@@ -59,11 +59,11 @@ function SignUp() {
               type="correo"
               id="correo"
               name="correo"
-              className="form-input"
+              className="mt-2 form-input focus:ring-2 focus:ring-blue-500 focus:border-transparent border-gray-300 rounded-md px-3 py-2 text-gray-800"
               placeholder="correo@ejemplo.com"
             />
           </div>
-          <div className="mb-4 mt-8">
+          <div className="mb-4 mt-4">
             <label htmlFor="password" className="block text-sm font-medium text-gray-600">
               Contraseña:
             </label>
@@ -71,7 +71,7 @@ function SignUp() {
               type="password"
               id="password"
               name="password"
-              className="form-input"
+              className="mt-2 form-input focus:ring-2 focus:ring-blue-500 focus:border-transparent border-gray-300 rounded-md px-3 py-2 text-gray-800"
               placeholder="Escribe tu contraseña"
             />
           </div>
