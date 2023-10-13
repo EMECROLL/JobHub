@@ -1,7 +1,11 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 function Home() {
+  const hover = "hover:bg-gray-800 p-2 rounded-lg";
   return (
+
+    
     <div className="w-full h-[1187px] relative overflow-hidden bg-white">
       <img
         src="https://factorial.mx/wp-content/uploads/2023/02/03121201/reuniones-de-trabajo.jpg"
@@ -29,12 +33,13 @@ function Home() {
       >
         Publicalas en JOBHUB
       </p>
-      <a
-        href="URL_DE_REGISTRO_EMPRESA"  // Reemplaza con la URL deseada
+      <Link to="/SignUp" className={hover}>
+      <p
         className="w-[453px] h-[66px] absolute left-[1208px] top-[1003px] text-2xl text-center text-[#2cbcc6]"
       >
         REGISTRAR EMPRESA
-      </a>
+      </p>
+      </Link>
     </div>
   );
 }

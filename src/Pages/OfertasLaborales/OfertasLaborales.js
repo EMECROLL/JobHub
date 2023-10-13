@@ -1,8 +1,9 @@
 import React from 'react';
 
 function OfertasLaborales() {
-  // Reemplaza "URL_DEL_CATALOGO" con la URL a la que deseas redirigir
+  // Reemplaza "URL_DEL_CATALOGO" con la URL 
   const catalogUrl = "URL_DEL_CATALOGO";
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
