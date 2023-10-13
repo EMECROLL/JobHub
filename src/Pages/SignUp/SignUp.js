@@ -1,9 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Axios from 'axios';
 import {BiLogoFacebook, BiLogoGmail} from 'react-icons/bi'
 import LOGO from './logo.png'
 import IMAGEN_SIGNUP from './pexels-cottonbro-studio-4069288.jpg'
+import { Link } from 'react-router-dom';
 
 function SignUp() {
+
+  const [nombreReg, setNombreReg] = useState("")
+  const [apellidoReg, setApellidoReg] = useState("")
+  const [correoReg, setCorreoReg] = useState("")
+  const [contraseniaReg, setContraseniaReg] = useState("")
+
+  const registro = () => {
+    Axios.post("http://localhost:3001/registro", {
+      nombre: nombreReg,
+      apellido: apellidoReg,
+      correo: correoReg,
+      contrasenia: contraseniaReg,
+    }).then((respuesta) => {
+      console.log(respuesta);
+    })
+  }
+
   return (
     <div className="flex justify-center items-center h-screen w-700 h-500 flex-shrink-0 rounded-2xl bg-white mix-blend-hard-light bg-gradient-to-t from-blue-300 via-transparent to-blue-100">
       <div className="m-4">
@@ -20,6 +39,7 @@ function SignUp() {
               Nombre(s):
             </label>
             <input
+              onChange={(e) => setNombreReg(e.target.value)}
               type="text"
               id="nombre"
               name="nombre"
@@ -32,6 +52,7 @@ function SignUp() {
               Apellido(s):
             </label>
             <input
+              onChange={(e) => setApellidoReg(e.target.value)}
               type="text"
               id="apellido"
               name="apellido"
@@ -56,6 +77,7 @@ function SignUp() {
               Correo:
             </label>
             <input
+              onChange={(e) => setCorreoReg(e.target.value)}
               type="correo"
               id="correo"
               name="correo"
@@ -68,6 +90,7 @@ function SignUp() {
               Contraseña:
             </label>
             <input
+              onChange={(e) => setContraseniaReg(e.target.value)}
               type="password"
               id="password"
               name="password"
@@ -75,12 +98,17 @@ function SignUp() {
               placeholder="Escribe tu contraseña"
             />
           </div>
-          <button className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
+          <button onClick={registro} className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
             Registrarse
           </button>
         </form>
         </div>
         <hr className="my-4 border-t border-gray-300" />
+        <div>
+        <Link to='/login'>
+          <h1 className='mb-4 text-center'>¿Ya tienes cuenta? Inicia sesión</h1>
+        </Link>
+        </div>
         <div className="mx-16 space-x-4">
           {/* Ícono de Facebook */}
           <a href='https://www.facebook.com/' className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 inline-flex items-center space-x-2">

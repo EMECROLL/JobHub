@@ -1,8 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react';
+import Axios from 'axios';
 import {BiLogoFacebook, BiLogoGmail} from 'react-icons/bi'
 import LOGO from './logo.png'
+import { Link } from 'react-router-dom';
 
 export default function Login() {
+
+  const [correoLog, setCorreoLog] = useState("")
+  const [contraseniaLog, setContraseniaLog] = useState("")
+
+  const [inicioSesionStatus, setInicioSesionStatus] = useState("")
+
+  const inicioSesion = () => {
+    Axios.post("http://localhost:3001/inicioSesion", {
+      correo: correoLog,
+      contrasenia: contraseniaLog,
+    }).then((respuesta) => {
+      
+      if(respuesta.data.message){
+        setInicioSesionStatus(respuesta.data.message)
+      } else {
+        setInicioSesionStatus(respuesta.data[0])
+      }
+    })
+  }
+
   return (
     <div className="flex justify-center items-center h-screen w-700 h-500 flex-shrink-0 rounded-2xl bg-white mix-blend-hard-light bg-gradient-to-t from-blue-300 via-transparent to-blue-100">
       <div className="px-6 py-8 bg-white rounded-lg shadow-md">
@@ -14,6 +36,7 @@ export default function Login() {
               Correo:
             </label>
             <input
+              onChange ={(e) => setCorreoLog(e.target.value)}
               type="correo"
               id="correo"
               name="correo"
@@ -26,6 +49,7 @@ export default function Login() {
               Contraseña:
             </label>
             <input
+              onChange={(e) => setContraseniaLog(e.target.value)}
               type="password"
               id="password"
               name="password"
@@ -33,12 +57,16 @@ export default function Login() {
               placeholder="Escribe tu contraseña"
             />
           </div>
-          <button className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
+          <button onClick={inicioSesion} className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
             Iniciar Sesión
           </button>
+          <h1 className='text-center color-red'>{inicioSesionStatus}</h1>
         </form>
         </div>
         <hr className="my-4 border-t border-gray-300" />
+        <Link to='/signup'>
+          <h1 className='mb-4 text-center'>¿No tienes cuenta? Registrate aquí.</h1>
+        </Link>
         <div className="mx-16 space-x-4">
           {/* Ícono de Facebook */}
           <a href='https://www.facebook.com/' className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 inline-flex items-center space-x-2">
