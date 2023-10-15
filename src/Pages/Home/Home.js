@@ -51,7 +51,7 @@ function Home() {
               </h2>
               <h3 className="absolute bottom-0 left-0 right-0 text-white text-lg mb-4">
                 Conoce todas las ofertas!
-              </h3>
+              </h3> 
             </div>
             </div>
       <p

@@ -9,7 +9,7 @@ function OfertasLaborales() {
 
   return (
     <>
-    <Header/>
+    <Header/> 
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <ul><a href={catalogUrl} className=" m-8 w-90% bg-[#0A3857] rounded-3xl shadow-md flex flex-row items-center">
         <div className="w-2/3 p-8 text-left">
