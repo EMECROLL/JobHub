@@ -1,4 +1,6 @@
 import React from 'react';
+import Header from '../../Components/Header/Header';
+import Footer from '../../Components/Footer/Footer';
 
 function OfertasLaborales() {
   // Reemplaza "URL_DEL_CATALOGO" con la URL 
@@ -6,6 +8,8 @@ function OfertasLaborales() {
   
 
   return (
+    <>
+    <Header/>
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <ul><a href={catalogUrl} className=" m-8 w-90% bg-[#0A3857] rounded-3xl shadow-md flex flex-row items-center">
         <div className="w-2/3 p-8 text-left">
@@ -73,7 +77,8 @@ function OfertasLaborales() {
       </ul>
     </div>
 
-    
+    <Footer/>
+    </>
   );
 }
 
