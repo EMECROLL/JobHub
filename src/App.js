@@ -4,6 +4,7 @@ import Home from './Pages/Home/Home';
 import Login from './Pages/LogIn/Login';
 import SignUp from './Pages/SignUp/SignUp';
 import OfertasLaborales from './Pages/OfertasLaborales/OfertasLaborales';
+import Vcatalgo from './Pages/catalogo/Vcatalgo';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/OfertasLaborales" element={<OfertasLaborales />} />
+          <Route path="/Vcatalgo" element={<Vcatalgo />} />
         </Routes>
       </div>
     </Router>
