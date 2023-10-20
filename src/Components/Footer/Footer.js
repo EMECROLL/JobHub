@@ -8,7 +8,7 @@ function Footer() {
         <h1>Manuel Alejandro Pasos Cupul</h1>
         <h1>Carlos Giovanny Garcia Padilla</h1>
         <h1>Maynor Javier Bermon Garcia</h1>
-        <h1>&copy; 2023</h1>
+        <h1>&copy; 2023</h1> 
       </div>
     </footer>
   );

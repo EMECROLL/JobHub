@@ -11,18 +11,26 @@ export default function Login() {
 
   const [inicioSesionStatus, setInicioSesionStatus] = useState("")
 
-  const inicioSesion = () => {
-    Axios.post("http://localhost:3001/inicioSesion", {
-      correo: correoLog,
-      contrasenia: contraseniaLog,
-    }).then((respuesta) => {
+  // const inicioSesion = () => {
+  //   Axios.post("http://localhost:3001/inicioSesion", {
+  //     correo: correoLog,
+  //     contrasenia: contraseniaLog,
+  //   }).then((respuesta) => {
       
-      if(respuesta.data.message){
-        setInicioSesionStatus(respuesta.data.message)
-      } else {
-        setInicioSesionStatus(respuesta.data[0])
-      }
-    })
+  //     if(respuesta.data.message){
+  //       setInicioSesionStatus(respuesta.data.message)
+  //     } else {
+  //       setInicioSesionStatus(respuesta.data[0])
+  //     }
+  //   })
+  // }
+
+  function enviar(evento){
+    evento.preventDefault();
+    Axios.post("http://localhost:3001/inicioSesion", {correoLog,contraseniaLog})
+    .then(respuesta => console.log(respuesta))
+    .then(window.location.href = "/")
+    .catch(error => console.log(error))
   }
 
   return (
@@ -30,7 +38,7 @@ export default function Login() {
       <div className="px-6 py-8 bg-white rounded-lg shadow-md">
         <img src={LOGO} className='w-60 h-16'></img>
         <div className='h-500'>
-        <form>
+        <form onSubmit={enviar}>
           <div className="mb-4 mt-4">
             <label htmlFor="correo" className="block text-sm font-medium text-gray-600">
               Correo:
@@ -57,9 +65,12 @@ export default function Login() {
               placeholder="Escribe tu contraseña"
             />
           </div>
-          <button onClick={inicioSesion} className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
-            Iniciar Sesión
-          </button>
+            <button className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
+              Iniciar Sesión
+            </button>
+          {/* <Link to='/'>
+            
+          </Link> */}
           <h1 className='text-center color-red'>{inicioSesionStatus}</h1>
         </form>
         </div>

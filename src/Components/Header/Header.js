@@ -9,7 +9,7 @@ function Header() {
   return (
     <header className="bg-blue-500 p-4">
       <div className="container mx-auto flex justify-between ">
-      <Link to="/" className={hover}>
+      <Link to="/" className={hover}> 
         <div>
           <img src={Logo} className="mr-2" width={80} />
         </div>

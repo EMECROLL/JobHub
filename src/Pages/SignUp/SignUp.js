@@ -98,9 +98,11 @@ function SignUp() {
               placeholder="Escribe tu contraseña"
             />
           </div>
-          <button onClick={registro} className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
-            Registrarse
-          </button>
+          <Link to="/Login">
+            <button onClick={registro} className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
+              Registrarse
+            </button>
+          </Link>
         </form>
         </div>
         <hr className="my-4 border-t border-gray-300" />
