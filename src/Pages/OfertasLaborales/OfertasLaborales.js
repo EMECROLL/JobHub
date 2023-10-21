@@ -16,11 +16,11 @@ function OfertasLaborales() {
       
       <ul>
         {/* Sector de Tecnologías de la Información */}
-        <Link to={catalogUrl} className=" m-8 w-90% bg-[#0A3857] rounded-3xl shadow-md flex flex-row items-center">
+        <Link to='/Vcatalgo/División de Tecnología' className=" m-8 w-90% bg-[#0A3857] rounded-3xl shadow-md flex flex-row items-center">
           <div className="w-2/3 p-8 text-left">
             <h1 className="text-4xl font-bold text-center mb-16 text-white mt-0">Sector de Tecnologías de la Información (TI)</h1>
             <p className="text-3xl text-white text-center mb-4">
-              Información relevante sobre la División de Ingeniería. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            En esta sección, descubrirás una abundancia de emocionantes oportunidades laborales en el campo de Tecnologías de la Información (TI). Explora nuestro catálogo de ofertas laborales y da un paso más cerca hacia una carrera en el mundo de la tecnología.
             </p>
           </div>
           <div className="w-1/3 p-8 text-right flex items-center justify-center">
@@ -33,11 +33,11 @@ function OfertasLaborales() {
         </Link>
     
         {/* Sector de Finanzas */}
-        <Link to={catalogUrl} className=" m-8 w-90% bg-[#0A3857] rounded-3xl shadow-md flex flex-row items-center">
+        <Link to='/Vcatalgo/División de Finanzas' className=" m-8 w-90% bg-[#0A3857] rounded-3xl shadow-md flex flex-row items-center">
           <div className="w-2/3 p-8 text-left">
             <h1 className="text-4xl font-bold text-center mb-16 text-white mt-0">Sector de Finanzas</h1>
             <p className="text-3xl text-white text-center mb-4">
-              Información relevante sobre la División de Finanzas. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Explora esta sección para acceder a una amplia gama de oportunidades laborales en el sector financiero. Desde banca y inversión hasta contabilidad y análisis financiero, aquí encontrarás el camino hacia una carrera sólida en finanzas.
             </p>
           </div>
           <div className="w-1/3 p-8 text-right flex items-center justify-center">
@@ -50,11 +50,11 @@ function OfertasLaborales() {
         </Link>
     
         {/* Sector de Medios y entretenimiento */}
-        <Link to={catalogUrl} className="m-8 w-90% bg-[#0A3857] rounded-3xl shadow-md flex flex-row items-center">
+        <Link to='/Vcatalgo/División de Medios' className="m-8 w-90% bg-[#0A3857] rounded-3xl shadow-md flex flex-row items-center">
           <div className="w-2/3 p-8 text-left">
             <h1 className="text-4xl font-bold text-center mb-16 text-white mt-0">Sector de Medios y entretenimiento</h1>
             <p className="text-3xl text-white text-center mb-4">
-              Información relevante sobre la División de Medios y entretenimiento. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Adéntrate en el emocionante mundo de los medios y el entretenimiento a través de esta sección. Descubre ofertas laborales en la industria del cine, la televisión, la música, la publicidad y mucho más. Tu próximo gran avance en la creatividad te espera aquí.
             </p>
           </div>
           <div className="w-1/3 p-8 text-right flex items-center justify-center">
@@ -67,11 +67,11 @@ function OfertasLaborales() {
         </Link>
     
         {/* Sector de Turismo y Hospitalidad */}
-        <Link to={catalogUrl} className="m-8 w-90% bg-[#0A3857] rounded-3xl shadow-md flex flex-row items-center">
+        <Link to='/Vcatalgo/División de Turismo' className="m-8 w-90% bg-[#0A3857] rounded-3xl shadow-md flex flex-row items-center">
           <div className="w-2/3 p-8 text-left">
             <h1 className="text-4xl font-bold text-center mb-16 text-white mt-0">Sector de Turismo y Hospitalidad</h1>
             <p className="text-3xl text-white text-center mb-4">
-              Información relevante sobre la División de Turismo y Hospitalidad. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            En esta sección, te presentamos un abanico de oportunidades en el sector de la hotelería y el hospedaje. Desde hoteles de lujo hasta complejos turísticos, explora ofertas laborales que te permitirán brindar experiencias excepcionales a los viajeros y huéspedes de todo el mundo.
             </p>
           </div>
           <div className="w-1/3 p-8 text-right flex items-center justify-center">

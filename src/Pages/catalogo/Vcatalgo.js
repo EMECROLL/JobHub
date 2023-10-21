@@ -8,7 +8,7 @@ function Vcatalgo() {
     <>
     <Header/>
     <div className="Catalogo">
-      <Catalogo />
+      <Catalogo/>
     </div>
     <Footer/>
     </>
