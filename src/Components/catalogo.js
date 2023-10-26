@@ -48,22 +48,22 @@ const Catalogo = () => {
       >
         Agregar Empresa
       </button> */}
-      
+
       {showAddForm && <AddCompanyForm onAddCompany={handleAddCompany} onCancel={handleCancel} />}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-      {companies.map((company) => {
-  if (company.tipo_vacante === categoria) {
-    return (
-      <Link to={`/informacion/${company.id}`} key={company.id}>
-        <div className="p-4 bg-blue-100 text-center rounded-lg shadow-md">
-          <img src={company.imagen_url} alt={company.empresa} className="mx-auto max-h-48"/>
-          <p className="text-blue-600 font-semibold mt-2">{company.empresa}</p>
-          <p className="text-gray-600 mt-2">{company.descripcion}</p>
-        </div>
-      </Link>
-    );
-  }
- return null;
+        {companies.map((company) => {
+          if (company.tipo_vacante === categoria) {
+            return (
+              <Link to={`/informacion/${company.id}`} key={company.id}>
+                <div className="p-4 bg-blue-100 text-center rounded-lg shadow-md">
+                  <img src={company.imagen_url} alt={company.empresa} className="mx-auto max-h-48" />
+                  <p className="text-blue-600 font-semibold mt-2">{company.empresa}</p>
+                  <p className="text-gray-600 mt-2">{company.titulo}</p>
+                </div>
+              </Link>
+            );
+          }
+          return null;
 
         })}
       </div>
