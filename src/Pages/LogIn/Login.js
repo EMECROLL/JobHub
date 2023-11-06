@@ -6,45 +6,67 @@ import { Link } from 'react-router-dom';
 
 export default function Login() {
 
-  const [correoLog, setCorreoLog] = useState("")
-  const [contraseniaLog, setContraseniaLog] = useState("")
+  const [datos, setDatos] = useState({
+    correo: '',
+    contrasenia: '',
+    autenticado: false
+});
 
-  const [inicioSesionStatus, setInicioSesionStatus] = useState("")
+const URL = "http://localhost:3001/login";
 
-  // const inicioSesion = () => {
-  //   Axios.post("http://localhost:3001/inicioSesion", {
-  //     correo: correoLog,
-  //     contrasenia: contraseniaLog,
-  //   }).then((respuesta) => {
-      
-  //     if(respuesta.data.message){
-  //       setInicioSesionStatus(respuesta.data.message)
-  //     } else {
-  //       setInicioSesionStatus(respuesta.data[0])
-  //     }
-  //   })
-  // }
+const iniciarSesion= async (e) => {
+    e.preventDefault();
 
-  function enviar(evento){
-    evento.preventDefault();
-    Axios.post("http://localhost:3001/inicioSesion", {correoLog,contraseniaLog})
-    .then(respuesta => console.log(respuesta))
-    .then(window.location.href = "/")
-    .catch(error => console.log(error))
-  }
+    //! Validaciones
+    if (!datos.correo || !datos.contrasenia) {
+        console.log('Por favor, complete todos los campos');
+        return; //* Detener la función si faltan campos
+    }
+
+    Axios.post(URL, { correo: datos.correo, contrasenia: datos.contrasenia })
+        .then(respuesta => {
+            if (respuesta.status === 200) {
+                
+                //* Guardar la información del usuario en el localStorage
+                localStorage.setItem('idUsuario', respuesta.data.id_usuario)
+                localStorage.setItem('nombreUsuario', respuesta.data.nombre)
+                localStorage.setItem('tipoUsuario', respuesta.data.tipo_usuario)
+                localStorage.setItem('estadoUsuario', true)
+
+                setDatos({...datos,autenticado:true})
+                window.location.href = "/dashboardHome";
+            } else {
+                console.log("Credenciales incorrectas");
+            }
+        })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                //! Si la respuesta del servidor tiene un mensaje de error
+                if (error.response.data.message === "Credenciales incorrectas") {
+                    console.log(error.response.data.message);
+                } else if (error.response.data.message === "El correo no existe en la base de datos") {
+                    console.log(error.response.data.message);
+                } else {
+                    console.log(error.response.data.message);
+                }
+            } else {
+                console.log("Error desconocido:", error);
+            }
+        });
+}
 
   return (
     <div className="flex justify-center items-center h-screen w-700 h-500 flex-shrink-0 rounded-2xl bg-white mix-blend-hard-light bg-gradient-to-t from-blue-300 via-transparent to-blue-100">
       <div className="px-6 py-8 bg-white rounded-lg shadow-md">
         <img src={LOGO} className='w-60 h-16'></img>
         <div className='h-500'>
-        <form onSubmit={enviar}>
+        <form>
           <div className="mb-4 mt-4">
             <label htmlFor="correo" className="block text-sm font-medium text-gray-600">
               Correo:
             </label>
             <input
-              onChange ={(e) => setCorreoLog(e.target.value)}
+              onChange={(e)=>setDatos({...datos,correo:e.target.value})}
               type="correo"
               id="correo"
               name="correo"
@@ -57,7 +79,7 @@ export default function Login() {
               Contraseña:
             </label>
             <input
-              onChange={(e) => setContraseniaLog(e.target.value)}
+              onChange={(e)=>setDatos({...datos,contrasenia:e.target.value})}
               type="password"
               id="password"
               name="password"
@@ -65,13 +87,9 @@ export default function Login() {
               placeholder="Escribe tu contraseña"
             />
           </div>
-            <button className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
+            <button onClick={iniciarSesion} className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
               Iniciar Sesión
             </button>
-          {/* <Link to='/'>
-            
-          </Link> */}
-          <h1 className='text-center color-red'>{inicioSesionStatus}</h1>
         </form>
         </div>
         <hr className="my-4 border-t border-gray-300" />
