@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import {BiLogoFacebook, BiLogoGmail} from 'react-icons/bi'
 import LOGO from './logo.png'
 import { Link } from 'react-router-dom';
+import {gapi} from 'gapi-script';
+import GoogleLogin from 'react-google-login';
 
 export default function Login() {
 
@@ -14,7 +15,7 @@ export default function Login() {
 
 const URL = "http://localhost:3001/login";
 
-const iniciarSesion= async (e) => {
+const iniciarSesion = async (e) => {
     e.preventDefault();
 
     //! Validaciones
@@ -53,6 +54,43 @@ const iniciarSesion= async (e) => {
                 console.log("Error desconocido:", error);
             }
         });
+}
+//* ID de cliente de Google Developers
+const clientID = "570667986663-rejfonej86qnv1gov31v1rfvohka5ndk.apps.googleusercontent.com"
+
+useEffect(() => {
+    //* Inicializar Google API
+    const iniciar = () => {
+      gapi.auth2.init({
+        clientId: clientID,
+      })
+    }
+    gapi.load("client:auth2", iniciar)
+}, [])
+
+const respuestaGoogleOk = (res) => {
+  console.log(res);
+
+  Axios.post(URL, { correo: res.profileObj.email, contrasenia: res.profileObj.googleId })
+        .then(respuesta => {
+            if (respuesta.status === 200) {
+                
+                //* Guardar la información del usuario en el localStorage
+                localStorage.setItem('idUsuario', respuesta.data.id_usuario)
+                localStorage.setItem('nombreUsuario', respuesta.data.nombre)
+                localStorage.setItem('tipoUsuario', respuesta.data.tipo_usuario)
+                localStorage.setItem('estadoUsuario', true)
+
+                setDatos({...datos,autenticado:true})
+                window.location.href = "/dashboardHome";
+            } else {
+                console.log("Credenciales incorrectas");
+            }
+        })
+}
+
+const respuestaGoogleError = () => {
+  console.log("Ha ocurrido un error");
 }
 
   return (
@@ -96,15 +134,14 @@ const iniciarSesion= async (e) => {
         <Link to='/signup'>
           <h1 className='mb-4 text-center'>¿No tienes cuenta? Registrate aquí.</h1>
         </Link>
-        <div className="mx-16 space-x-4">
-          {/* Ícono de Facebook */}
-          <a href='https://www.facebook.com/' className="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 inline-flex items-center space-x-2">
-            <BiLogoFacebook></BiLogoFacebook> 
-          </a>
-          {/* Ícono de Gmail */}
-          <a href="https://mail.google.com" className="bg-red-500 text-white rounded-md px-4 py-2 hover:bg-red-600 inline-flex items-center space-x-2">
-            <BiLogoGmail></BiLogoGmail> 
-          </a>
+        <div className="mx-20 space-x-4">
+        <GoogleLogin
+          clientId={clientID}
+          buttonText="Login"
+          onSuccess={respuestaGoogleOk}
+          onFailure={respuestaGoogleError}
+          cookiePolicy={'single_host_origin'}
+        />
         </div>
       </div>
     </div>
