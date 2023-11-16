@@ -16,6 +16,7 @@ function SignUp() {
   const [contraseniasNoCoinciden, setContraseniasNoCoinciden] = useState(false);
   const [camposVacios, setCamposVacios] = useState(false);
   const [correoExistente, setCorreoExistente] = useState(false);
+  const [contraseniaValida, setContraseniaInvalida] = useState(false);
 
   
 
@@ -33,6 +34,15 @@ function SignUp() {
         setConfirmContrasenia("");
         setContraseniasNoCoinciden(true);
         return; //* Detener la función si las contraseñas no coinciden
+    }
+
+    //! Validar longitud mínima, mayúscula y símbolo en la contraseña
+    const validacionContrasenia = /^(?=.*[A-Z])(?=.*[!@#$%^&?*])(.{8,})$/;
+
+    if (!validacionContrasenia.test(contrasenia)) {
+        setConfirmContrasenia("");
+        setContraseniaInvalida(true)
+        return;
     }
 
     Axios.post("http://localhost:3001/signup", {
@@ -180,9 +190,12 @@ const respuestaGoogleError = () => {
               placeholder="Confirma tu contraseña"
               required
             />
-            {contraseniasNoCoinciden && <p className='text-red-500 text-sm mt-2'>Las contraseñas no coinciden</p>}
-            {camposVacios && <p className='text-red-500 text-sm mt-2'>Por favor, complete todos los campos</p>}
-            {correoExistente && <p className='text-red-500 text-sm mt-2'>Correo ya existente. Por favor, inicia sesión</p>}
+            <div className='w-64'>
+              {contraseniasNoCoinciden && <p className='text-red-500 text-sm mt-2'>Las contraseñas no coinciden</p>}
+              {camposVacios && <p className='text-red-500 text-sm mt-2'>Por favor, complete todos los campos</p>}
+              {correoExistente && <p className='text-red-500 text-sm mt-2'>Correo ya existente. Por favor, inicia sesión</p>}
+              {contraseniaValida && <p className='text-red-500 text-sm mt-2'>La contraseña debe tener al menos 8 caracteres, incluir al menos una letra mayúscula y al menos un símbolo</p>}
+            </div>
           </div>
             <button onClick={registro} className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
               Registrarse
