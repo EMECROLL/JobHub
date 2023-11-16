@@ -58,7 +58,7 @@ const Header = () => {
               </>
             ) : (
               <li className="my-2 md:mx-2">
-                <Link to="/Login" className={texto}>
+                <Link to="/SignUp" className={texto}>
                   Ingresar
                 </Link>
               </li>

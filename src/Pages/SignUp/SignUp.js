@@ -13,31 +13,40 @@ function SignUp() {
   const [correo, setCorreo] = useState("")
   const [contrasenia, setContrasenia] = useState("")
   const [confirmContrasenia, setConfirmContrasenia] = useState("")
+  const [contraseniasNoCoinciden, setContraseniasNoCoinciden] = useState(false);
+  const [camposVacios, setCamposVacios] = useState(false);
+  const [correoExistente, setCorreoExistente] = useState(false);
 
   
 
-  const registro = () => {
+  const registro = async (e) => {
+    e.preventDefault();
 
     //! Validaciones
+    //! Validar que los campos no estén vacíos
     if (!nombre || !apellido || !correo || !contrasenia || !confirmContrasenia) {
-      console.log('Por favor, complete todos los campos');
+      setCamposVacios(true);
       return; //* Detener la función si faltan campos
     }
-
+    //! Validar que las contraseñas coincidan
     if (contrasenia !== confirmContrasenia) {
         setConfirmContrasenia("");
-        console.log('Las contraseñas no coinciden');
+        setContraseniasNoCoinciden(true);
         return; //* Detener la función si las contraseñas no coinciden
     }
-    Axios.post("http://localhost:3001/users", {
-      nombre: nombre,
-      apellido: apellido,
-      correo: correo,
-      contrasenia: contrasenia,
-    }).then((respuesta) => {
-      console.log(respuesta);
+
+    Axios.post("http://localhost:3001/signup", {
+    nombre: nombre,
+    apellido: apellido,
+    correo: correo.toLowerCase(),
+    contrasenia: contrasenia,
+  })
+    .then((respuesta) => {
       window.location.href = "/login";
     })
+    .catch((error) => {
+      setCorreoExistente(true);
+    });
   }
 
 //* ID de cliente de Google Developers
@@ -171,6 +180,9 @@ const respuestaGoogleError = () => {
               placeholder="Confirma tu contraseña"
               required
             />
+            {contraseniasNoCoinciden && <p className='text-red-500 text-sm mt-2'>Las contraseñas no coinciden</p>}
+            {camposVacios && <p className='text-red-500 text-sm mt-2'>Por favor, complete todos los campos</p>}
+            {correoExistente && <p className='text-red-500 text-sm mt-2'>Correo ya existente. Por favor, inicia sesión</p>}
           </div>
             <button onClick={registro} className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
               Registrarse

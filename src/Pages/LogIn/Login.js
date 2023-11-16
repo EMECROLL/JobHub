@@ -137,7 +137,7 @@ const respuestaGoogleError = () => {
         <div className="mx-20 space-x-4">
         <GoogleLogin
           clientId={clientID}
-          buttonText="Login"
+          buttonText="Iniciar Sesión"
           onSuccess={respuestaGoogleOk}
           onFailure={respuestaGoogleError}
           cookiePolicy={'single_host_origin'}
