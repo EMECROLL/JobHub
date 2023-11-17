@@ -26,7 +26,7 @@ function Sidebar() {
           </>
         ) : (
           <li className="mb-2">
-            <a href="#" className="block text-white bg-slate-500 hover:bg-blue-500 py-2 px-4 rounded-lg">
+            <a href="dashboardOfertas" className="block text-white bg-slate-500 hover:bg-blue-500 py-2 px-4 rounded-lg">
               Ofertas Laborales
             </a>
           </li>

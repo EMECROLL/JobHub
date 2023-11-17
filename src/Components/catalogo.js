@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AddCompanyForm from './formulario';
+
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const Catalogo = () => {
   const { categoria } = useParams();
   const [companies, setCompanies] = useState([]);
-  const [showAddForm, setShowAddForm] = useState(false);
 
   const loadCompanies = () => {
     axios.get('http://localhost:3001/api/ofertas-laborales')
@@ -24,32 +23,9 @@ const Catalogo = () => {
     loadCompanies();
   }, []);
 
-  const handleAddCompany = (newCompany) => {
-    axios.post('http://localhost:3001/api/ofertas-laborales', newCompany)
-      .then((response) => {
-        loadCompanies();
-      })
-      .catch((error) => {
-        console.error('Error al agregar la empresa:', error);
-      });
-
-    setShowAddForm(false);
-  };
-
-  const handleCancel = () => {
-    setShowAddForm(false);
-  };
 
   return (
     <div className="p-4 mt-8 mb-64">
-      {/* <button
-        onClick={() => setShowAddForm(true)}
-        className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600"
-      >
-        Agregar Empresa
-      </button> */}
-
-      {showAddForm && <AddCompanyForm onAddCompany={handleAddCompany} onCancel={handleCancel} />}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
         {companies.map((company) => {
           if (company.tipo_vacante === categoria) {

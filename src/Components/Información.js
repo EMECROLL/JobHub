@@ -11,7 +11,7 @@ function Información() {
   const { id } = useParams();
   const [objectData, setObjectData] = useState({});
   const [map, setMap] = useState(null);
-  const [marker, setMarker] = useState(null);
+ 
 
   useEffect(() => {
     axios.get(`http://localhost:3001/api/ofertas-laborales/${id}`)
@@ -55,9 +55,7 @@ function Información() {
             newMap.setCenter(coordinates);
             newMap.setZoom(12);
 
-            // Agrega un marcador en la ubicación de la empresa
-            const newMarker = new mapboxgl.Marker().setLngLat(coordinates).addTo(newMap);
-            setMarker(newMarker);
+            
 
             // Agrega el geocodificador de Mapbox
             newMap.addControl(

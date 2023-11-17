@@ -9,6 +9,7 @@ import Información from './Components/Información';
 import DashboardHome from './Pages/Dashboard_Home/DashboardHome';
 import DashboardUsuarios from './Pages/Dashboard_Usuarios/DashboardUsuarios';
 import DashboardEmpresas from './Pages/Dashboard_Empresas/DashboardEmpresas';
+import DashboardOfertasLaborales from './Pages/Dashboard_Ofertas/DashboardOfertas';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path='/dashboardHome' element={<DashboardHome></DashboardHome>}></Route>
           <Route path='/dashboardUsuarios' element={<DashboardUsuarios></DashboardUsuarios>}></Route>
           <Route path='/dashboardEmpresas' element={<DashboardEmpresas></DashboardEmpresas>}></Route>
+          <Route path='/dashboardOfertas' element={<DashboardOfertasLaborales></DashboardOfertasLaborales>}></Route>
         </Routes>
       </div>
     </Router>
