@@ -41,8 +41,9 @@ function Información() {
       // Crea una nueva instancia del mapa
       const newMap = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11',
+        style: 'mapbox://styles/mapbox/streets-v8',
         zoom: 3,
+        attributionControl: false, 
       });
 
       setMap(newMap);
@@ -58,13 +59,7 @@ function Información() {
             
 
             // Agrega el geocodificador de Mapbox
-            newMap.addControl(
-              new MapboxGeocoder({
-                accessToken: mapboxgl.accessToken,
-                mapboxgl: mapboxgl,
-                marker: false,
-              })
-            );
+            
           } else {
             console.error('No se encontraron datos de ubicación para la empresa.');
           }
@@ -97,9 +92,19 @@ function Información() {
             </button>
           </Link>
         </div>
+
+        </div>
+        {/* Mapa */}
+        <div className=' flex justify-center my-4'>
+        <div className="w-full max-w-5xl overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800">
+        <div id="map" className="w-full h-56"></div>
+        <div className="py-5 text-center">
+          <p className="block text-xl font-bold text-gray-800 dark:text-white" tabIndex="0" role="link">{objectData.empresa}</p>
+          <span className="text-sm text-gray-700 dark:text-gray-200">Ubicación de la empresa</span>
+        </div>
       </div>
-      {/* Mapa */}
-      <div id="map" className="flex items-center justify-center m-4"></div>
+      </div>
+      
       <Footer />
     </>
   );

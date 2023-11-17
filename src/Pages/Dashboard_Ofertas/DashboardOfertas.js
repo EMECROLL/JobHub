@@ -7,30 +7,32 @@ import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 function DashboardOfertasLaborales() {
   const [ofertasLaborales, setOfertasLaborales] = useState([]);
   const [ofertaLaboralEdit, setOfertaLaboralEdit] = useState(null);
+  const [nuevaOfertaLaboral, setNuevaOfertaLaboral] = useState({
+    empresa: "",
+    descripcion: "",
+    logo_url: "",
+    imagen_url: "",
+    tipoVacante: "",
+    num_telefonico: "",
+  });
 
   useEffect(() => {
     // Obtener todas las ofertas laborales al cargar el componente
-    
-    // Obtener el id_usuario almacenado en localStorage
-const idUsuario = localStorage.getItem('idUsuario');
+    const idUsuario = localStorage.getItem('idUsuario');
 
-// Usar el id_usuario para obtener las ofertas laborales del usuario
-Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
-  .then((response) => {
-    setOfertasLaborales(response.data);
-  })
-  .catch((error) => {
-    console.error("Error al obtener las ofertas laborales del usuario:", error);
-  });
+    Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
+      .then((response) => {
+        setOfertasLaborales(response.data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener las ofertas laborales del usuario:", error);
+      });
+  }, []);
 
-}, []);
-
-  // Función para eliminar una oferta laboral por ID
   const eliminarOfertaLaboral = (id) => {
     Axios.delete(`http://localhost:3001/api/ofertas-laborales/${id}`)
       .then((response) => {
         console.log(response.data);
-        // Actualizar la lista de ofertas laborales después de eliminar
         const updatedOfertasLaborales = ofertasLaborales.filter((oferta) => oferta.id !== id);
         setOfertasLaborales(updatedOfertasLaborales);
       })
@@ -38,8 +40,7 @@ Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
         console.error("Error al eliminar la oferta laboral:", error);
       });
   };
-  
-  // Función para cargar los detalles de una oferta laboral para editar
+
   const cargarDetallesOfertaLaboral = (id) => {
     Axios.get(`http://localhost:3001/api/ofertas-laborales/${id}`)
       .then((response) => {
@@ -49,11 +50,10 @@ Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
         console.error("Error al obtener los detalles de la oferta laboral:", error);
       });
   };
-  
-  // Función para actualizar una oferta laboral editada
+
   const actualizarOfertaLaboral = () => {
     const { id, empresa, descripcion, logo_url, imagen_url, tipoVacante, num_telefonico } = ofertaLaboralEdit;
-  
+
     Axios.put(`http://localhost:3001/api/ofertas-laborales/${id}`, {
       empresa,
       descripcion,
@@ -64,9 +64,7 @@ Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
     })
       .then((response) => {
         console.log(response.data);
-        // Limpiar el estado de edición después de actualizar
         setOfertaLaboralEdit(null);
-        // Actualizar la lista de ofertas laborales después de la edición
         const updatedOfertasLaborales = ofertasLaborales.map((oferta) => (oferta.id === id ? response.data : oferta));
         setOfertasLaborales(updatedOfertasLaborales);
       })
@@ -74,14 +72,46 @@ Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
         console.error("Error al actualizar la oferta laboral:", error);
       });
   };
-  
-  // Función para agregar una nueva oferta laboral
+
   const agregarOfertaLaboral = () => {
-    // Implementa la lógica para agregar una nueva oferta laboral
-    // Puedes utilizar un modal, un formulario, etc., según tu diseño y necesidades
-    console.log("Implementa la lógica para agregar una nueva oferta laboral");
+    const { empresa, descripcion, logo_url, imagen_url, tipoVacante, num_telefonico } = nuevaOfertaLaboral;
+  
+    const data = {
+      empresa,
+      descripcion, // Asegúrate de que estas propiedades estén incluidas en la solicitud
+      logoUrl: logo_url,
+      imagenUrl: imagen_url,
+      tipoVacante,
+      num_telefonico, // Asegúrate de incluir num_telefonico en la solicitud
+    };
+  
+    Axios.post('http://localhost:3001/api/ofertas-laborales', data)
+      .then((response) => {
+        console.log('Oferta laboral agregada:', response.data);
+        setOfertasLaborales([...ofertasLaborales, response.data]);
+        setNuevaOfertaLaboral({
+          empresa: "",
+          descripcion: "",
+          logo_url: "",
+          imagen_url: "",
+          tipoVacante: "",
+          num_telefonico: "",
+        });
+      })
+      .catch((error) => {
+        console.error('Error al agregar la oferta laboral:', error);
+      });
   };
   
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNuevaOfertaLaboral({ ...nuevaOfertaLaboral, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    agregarOfertaLaboral();
+  };
   return (
     <>
       <div className="flex">
@@ -92,6 +122,7 @@ Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
             <h1 className="text-3xl font-bold mb-4">Gestionar Ofertas Laborales</h1>
             <div className="bg-white p-4 rounded-lg shadow-md">
               <div className="mb-4">
+                {/* Botón para agregar una nueva oferta laboral */}
                 <button
                   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                   onClick={agregarOfertaLaboral}
@@ -100,7 +131,7 @@ Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
                   Agregar Oferta Laboral
                 </button>
               </div>
-
+  
               <h2 className="text-2xl mb-4">Ofertas laborales registradas:</h2>
               <table className="table-auto">
                 <thead>
@@ -115,8 +146,8 @@ Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
                   </tr>
                 </thead>
                 <tbody>
-                {ofertasLaborales.map((ofertaLaboral, index) => (
-    <tr key={index}>
+                  {ofertasLaborales.map((ofertaLaboral, index) => (
+                    <tr key={index}>
                       <td className="px-4 py-2">{ofertaLaboral.empresa}</td>
                       <td className="px-4 py-2">{ofertaLaboral.descripcion}</td>
                       <td className="px-4 py-2">
@@ -128,24 +159,23 @@ Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
                       <td className="px-4 py-2">{ofertaLaboral.tipoVacante}</td>
                       <td className="px-4 py-2">{ofertaLaboral.num_telefonico}</td>
                       <td className="px-4 py-2">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-          onClick={() => cargarDetallesOfertaLaboral(ofertaLaboral.id)}
-        >
-          <FaEdit className="inline-block mr-1" />
-          Actualizar
-        </button>
-        <button
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => eliminarOfertaLaboral(ofertaLaboral.id)}
-        >
-          <FaTrash className="inline-block mr-1" />
-          Eliminar
-        </button>
-      </td>
-    </tr>
-  ))}
-
+                        <button
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                          onClick={() => cargarDetallesOfertaLaboral(ofertaLaboral.id)}
+                        >
+                          <FaEdit className="inline-block mr-1" />
+                          Actualizar
+                        </button>
+                        <button
+                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                          onClick={() => eliminarOfertaLaboral(ofertaLaboral.id)}
+                        >
+                          <FaTrash className="inline-block mr-1" />
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -154,6 +184,7 @@ Axios.get(`http://localhost:3001/api/ofertas-laborales-usuario/${idUsuario}`)
       </div>
     </>
   );
+  
 }
 
 export default DashboardOfertasLaborales;
