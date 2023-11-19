@@ -10,6 +10,7 @@ import DashboardHome from './Pages/Dashboard_Home/DashboardHome';
 import DashboardUsuarios from './Pages/Dashboard_Usuarios/DashboardUsuarios';
 import DashboardEmpresas from './Pages/Dashboard_Empresas/DashboardEmpresas';
 import DashboardOfertasLaborales from './Pages/Dashboard_Ofertas/DashboardOfertas';
+import AgregarUsuarios from './Pages/Dashboard_Usuarios/AgregarUsuarios';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           {/* Dashboards */}
           <Route path='/dashboardHome' element={<DashboardHome></DashboardHome>}></Route>
           <Route path='/dashboardUsuarios' element={<DashboardUsuarios></DashboardUsuarios>}></Route>
+          <Route path='/addUser' element={<AgregarUsuarios></AgregarUsuarios>}></Route>
           <Route path='/dashboardEmpresas' element={<DashboardEmpresas></DashboardEmpresas>}></Route>
           <Route path='/dashboardOfertas' element={<DashboardOfertasLaborales></DashboardOfertasLaborales>}></Route>
         </Routes>
