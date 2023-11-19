@@ -120,106 +120,106 @@ function DashboardUsuarios() {
 
               {/* Modal */}
               {mostrarModal && (
-  <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-    <div className="bg-white p-8 rounded-lg shadow-md">
-      <h2 className="text-2xl mb-4">{usuarioSeleccionado ? "Actualizar Usuario" : "Agregar Usuario"}</h2>
-      <form onSubmit={usuarioSeleccionado ? handleActualizarUsuario : handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="tipoUsuario" className="block text-sm font-medium text-gray-600">
-            Tipo de Usuario
-          </label>
-          <select
-            id="tipoUsuario"
-            name="tipoUsuario"
-            value={tipoUsuario}
-            onChange={(e) => setTipoUsuario(e.target.value)}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            required
-          >
-            <option value="1">Administrador</option>
-            <option value="2">Usuario Registrado</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="nombre" className="block text-sm font-medium text-gray-600">
-            Nombre
-          </label>
-          <input
-            type="text"
-            id="nombre"
-            name="nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="apellido" className="block text-sm font-medium text-gray-600">
-            Apellido
-          </label>
-          <input
-            type="text"
-            id="apellido"
-            name="apellido"
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="correo" className="block text-sm font-medium text-gray-600">
-            Correo Electrónico
-          </label>
-          <input
-            type="email"
-            id="correo"
-            name="correo"
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-            required
-          />
-        </div>
-        {tipoUsuario === "1" && ( // Mostrar el campo de contraseña solo si el usuario es administrador
-          <div className="mb-4">
-            <label htmlFor="contrasenia" className="block text-sm font-medium text-gray-600">
-              Contraseña
-            </label>
-            <input
-              type="password"
-              id="contrasenia"
-              name="contrasenia"
-              value={contrasenia}
-              onChange={(e) => setContrasenia(e.target.value)}
-              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              required
-            />
-          </div>
-        )}
-        <div className="flex justify-end">
-          <button
-            type="button"
-            className="mr-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => {
-              setMostrarModal(false);
-              limpiarFormulario();
-            }}
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            {usuarioSeleccionado ? "Actualizar" : "Agregar"}
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-)}
+              <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
+                <div className="bg-white p-8 rounded-lg shadow-md">
+                  <h2 className="text-2xl mb-4">{usuarioSeleccionado ? "Actualizar Usuario" : "Agregar Usuario"}</h2>
+                  <form onSubmit={usuarioSeleccionado ? handleActualizarUsuario : handleSubmit}>
+                    <div className="mb-4">
+                      <label htmlFor="tipoUsuario" className="block text-sm font-medium text-gray-600">
+                        Tipo de Usuario
+                      </label>
+                      <select
+                        id="tipoUsuario"
+                        name="tipoUsuario"
+                        value={tipoUsuario}
+                        onChange={(e) => setTipoUsuario(e.target.value)}
+                        className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        required
+                      >
+                        <option value="1">Administrador</option>
+                        <option value="2">Usuario Registrado</option>
+                      </select>
+                    </div>
+                    <div className="mb-4">
+                      <label htmlFor="nombre" className="block text-sm font-medium text-gray-600">
+                        Nombre
+                      </label>
+                      <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
+                        className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        required
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label htmlFor="apellido" className="block text-sm font-medium text-gray-600">
+                        Apellido
+                      </label>
+                      <input
+                        type="text"
+                        id="apellido"
+                        name="apellido"
+                        value={apellido}
+                        onChange={(e) => setApellido(e.target.value)}
+                        className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        required
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label htmlFor="correo" className="block text-sm font-medium text-gray-600">
+                        Correo Electrónico
+                      </label>
+                      <input
+                        type="email"
+                        id="correo"
+                        name="correo"
+                        value={correo}
+                        onChange={(e) => setCorreo(e.target.value)}
+                        className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        required
+                      />
+                    </div>
+                    {tipoUsuario === "1" && ( // Mostrar el campo de contraseña solo si el usuario es administrador
+                      <div className="mb-4">
+                        <label htmlFor="contrasenia" className="block text-sm font-medium text-gray-600">
+                          Contraseña
+                        </label>
+                        <input
+                          type="password"
+                          id="contrasenia"
+                          name="contrasenia"
+                          value={contrasenia}
+                          onChange={(e) => setContrasenia(e.target.value)}
+                          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                          required
+                        />
+                      </div>
+                    )}
+                        <div className="flex justify-end">
+                        <button
+                          type="button"
+                          className="mr-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                          onClick={() => {
+                            setMostrarModal(false);
+                            limpiarFormulario();
+                          }}
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          type="submit"
+                          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                          {usuarioSeleccionado ? "Actualizar" : "Agregar"}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
 
               <h2 className="text-2xl mb-4">Usuarios registrados:</h2>
               <table className="table-auto">
@@ -247,10 +247,7 @@ function DashboardUsuarios() {
                           <FaEdit className="inline-block mr-1" />
                           Actualizar
                         </button>
-                        <button
-  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-  onClick={() => eliminarUsuario(usuario.id_usuario)}
->
+                        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => eliminarUsuario(usuario.id_usuario)}>
                           <FaTrash className="inline-block mr-1" />
                           Eliminar
                         </button>

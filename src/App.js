@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from './Pages/Home/Home';
 import Login from './Pages/LogIn/Login';
 import SignUp from './Pages/SignUp/SignUp';
+import ForgetPassword from './Pages/ForgetPassword/ForgetPassword';
+import ResetPassword from './Pages/ResetPassword/ResetPassword';
 import OfertasLaborales from './Pages/OfertasLaborales/OfertasLaborales';
 import Vcatalgo from './Pages/catalogo/Vcatalgo';
 import Información from './Components/Información';
@@ -11,6 +13,7 @@ import DashboardUsuarios from './Pages/Dashboard_Usuarios/DashboardUsuarios';
 import DashboardEmpresas from './Pages/Dashboard_Empresas/DashboardEmpresas';
 import DashboardOfertasLaborales from './Pages/Dashboard_Ofertas/DashboardOfertas';
 import AgregarUsuarios from './Pages/Dashboard_Usuarios/AgregarUsuarios';
+
 
 
 function App() {
@@ -24,6 +27,8 @@ function App() {
 
           <Route path="/Login" element={<Login />} />
           <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/forgetPassword" element={<ForgetPassword />} />
+          <Route path='/reset-password/:token' element={<ResetPassword></ResetPassword>} />
 
           <Route path="/OfertasLaborales" element={<OfertasLaborales />} />
           <Route path="/Vcatalgo/:categoria" element={<Vcatalgo />} />

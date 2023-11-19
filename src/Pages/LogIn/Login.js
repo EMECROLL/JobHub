@@ -96,7 +96,7 @@ const respuestaGoogleError = () => {
   return (
     <div className="flex justify-center items-center h-screen w-700 h-500 flex-shrink-0 rounded-2xl bg-white mix-blend-hard-light bg-gradient-to-t from-blue-300 via-transparent to-blue-100">
       <div className="px-6 py-8 bg-white rounded-lg shadow-md">
-        <img src={LOGO} className='w-60 h-16'></img>
+        <img src={LOGO} className='w-60 h-16 ml-7'></img>
         <div className='h-500'>
         <form>
           <div className="mb-4 mt-4">
@@ -124,15 +124,18 @@ const respuestaGoogleError = () => {
               className="mt-2 form-input focus:ring-2 focus:ring-blue-500 focus:border-transparent border-gray-300 rounded-md px-3 py-2 text-gray-800"
               placeholder="Escribe tu contraseña"
             />
+            <Link to='/forgetPassword'>
+              <h1 className='mb-6 text-blue-700'>Olvidaste tu contraseña?</h1>
+            </Link>
           </div>
-            <button onClick={iniciarSesion} className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
+            <button onClick={iniciarSesion} className="mx-20 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 ">
               Iniciar Sesión
             </button>
         </form>
         </div>
         <hr className="my-4 border-t border-gray-300" />
         <Link to='/signup'>
-          <h1 className='mb-4 text-center'>¿No tienes cuenta? Registrate aquí.</h1>
+          <h1 className='mb-4 text-center text-blue-700'>¿No tienes cuenta? Registrate aquí.</h1>
         </Link>
         <div className="mx-20 space-x-4">
         <GoogleLogin
