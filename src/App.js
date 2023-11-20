@@ -4,6 +4,7 @@ import Home from './Pages/Home/Home';
 import Login from './Pages/LogIn/Login';
 import SignUp from './Pages/SignUp/SignUp';
 import ForgetPassword from './Pages/ForgetPassword/ForgetPassword';
+import MessagePassword from './Pages/MessagePassword/MessagePassword';
 import ResetPassword from './Pages/ResetPassword/ResetPassword';
 import OfertasLaborales from './Pages/OfertasLaborales/OfertasLaborales';
 import Vcatalgo from './Pages/catalogo/Vcatalgo';
@@ -12,7 +13,6 @@ import DashboardHome from './Pages/Dashboard_Home/DashboardHome';
 import DashboardUsuarios from './Pages/Dashboard_Usuarios/DashboardUsuarios';
 import DashboardEmpresas from './Pages/Dashboard_Empresas/DashboardEmpresas';
 import DashboardOfertasLaborales from './Pages/Dashboard_Ofertas/DashboardOfertas';
-import AgregarUsuarios from './Pages/Dashboard_Usuarios/AgregarUsuarios';
 
 
 
@@ -24,10 +24,11 @@ function App() {
           {/* Inicio */}
           <Route path="/" element={<Home />} />
 
-
+          
           <Route path="/Login" element={<Login />} />
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/forgetPassword" element={<ForgetPassword />} />
+          <Route path="//messagePassword" element={<MessagePassword />} />
           <Route path='/reset-password/:token' element={<ResetPassword></ResetPassword>} />
 
           <Route path="/OfertasLaborales" element={<OfertasLaborales />} />
@@ -39,7 +40,6 @@ function App() {
           {/* Dashboards */}
           <Route path='/dashboardHome' element={<DashboardHome></DashboardHome>}></Route>
           <Route path='/dashboardUsuarios' element={<DashboardUsuarios></DashboardUsuarios>}></Route>
-          <Route path='/addUser' element={<AgregarUsuarios></AgregarUsuarios>}></Route>
           <Route path='/dashboardEmpresas' element={<DashboardEmpresas></DashboardEmpresas>}></Route>
           <Route path='/dashboardOfertas' element={<DashboardOfertasLaborales></DashboardOfertasLaborales>}></Route>
         </Routes>

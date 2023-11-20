@@ -15,7 +15,7 @@ function DashboardUsuarios() {
   const [tipoUsuario, setTipoUsuario] = useState("1");
 
   useEffect(() => {
-    actualizarUsuarios();
+    mostrarUsuarios();
   }, []);
 
   const abrirModalAgregar = () => {
@@ -41,7 +41,7 @@ function DashboardUsuarios() {
     setTipoUsuario("1");
   };
 
-  const handleSubmit = async (e) => {
+  const enviar = async (e) => {
     e.preventDefault();
 
     try {
@@ -55,13 +55,13 @@ function DashboardUsuarios() {
 
       setMostrarModal(false);
       limpiarFormulario();
-      actualizarUsuarios();
+      mostrarUsuarios();
     } catch (error) {
       console.error("Error al agregar usuario:", error);
     }
   };
 
-  const handleActualizarUsuario = async () => {
+  const actualizarUsuario = async () => {
     try {
       await Axios.put(`http://localhost:3001/users/${usuarioSeleccionado.id_usuario}`, {
         nombre: nombre,
@@ -73,13 +73,13 @@ function DashboardUsuarios() {
 
       setMostrarModal(false);
       limpiarFormulario();
-      actualizarUsuarios();
+      mostrarUsuarios();
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
     }
   };
 
-  const actualizarUsuarios = () => {
+  const mostrarUsuarios = () => {
     Axios.get("http://localhost:3001/users/")
       .then((response) => {
         const usuariosOrdenados = response.data.sort((a, b) => a.tipo_usuario - b.tipo_usuario);
@@ -91,9 +91,9 @@ function DashboardUsuarios() {
   };
 
   const eliminarUsuario = async (id) => {
-    try {// Añade esta línea para depuración
+    try {
       await Axios.delete(`http://localhost:3001/users/${id}`);
-      actualizarUsuarios();
+      mostrarUsuarios();
     } catch (error) {
       console.error("Error al eliminar usuario:", error);
     }
@@ -123,7 +123,7 @@ function DashboardUsuarios() {
               <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
                 <div className="bg-white p-8 rounded-lg shadow-md">
                   <h2 className="text-2xl mb-4">{usuarioSeleccionado ? "Actualizar Usuario" : "Agregar Usuario"}</h2>
-                  <form onSubmit={usuarioSeleccionado ? handleActualizarUsuario : handleSubmit}>
+                  <form onSubmit={usuarioSeleccionado ? actualizarUsuario : enviar}>
                     <div className="mb-4">
                       <label htmlFor="tipoUsuario" className="block text-sm font-medium text-gray-600">
                         Tipo de Usuario

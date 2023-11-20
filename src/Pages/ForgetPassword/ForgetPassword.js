@@ -4,10 +4,10 @@ import Axios from 'axios';
 function ForgetPassword() {
   const [email, setEmail] = useState('');
 
-  const handleSubmit = (e) => {
+  const recuperarContra = (e) => {
     e.preventDefault();
     Axios.post('http://localhost:3001/forgot-password', { email });
-    alert('Se ha enviado un correo de recuperación a su correo electrónico.');
+    window.location.href = '/messagePassword';
     console.log('Enviar correo de recuperación para:', email);
   };
 
@@ -16,7 +16,7 @@ function ForgetPassword() {
       <div className='flex justify-center items-center h-screen w-700 h-500 flex-shrink-0 rounded-2xl bg-white mix-blend-hard-light bg-gradient-to-t from-blue-300 via-transparent to-blue-100'>
         <div className='bg-white rounded-lg shadow-md  p-8'>
           <h1 className='text-2xl font-semibold mb-6'>Recuperar Contraseña</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={recuperarContra}>
             <div className='mb-4'>
               <label htmlFor='email' className='block text-sm font-medium text-gray-600'>
                 Correo Electrónico:
