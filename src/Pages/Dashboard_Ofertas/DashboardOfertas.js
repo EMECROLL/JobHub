@@ -185,19 +185,25 @@ function DashboardOfertasLaborales() {
                         />
                       </div>
                       <div className="mb-4">
-                        <label htmlFor="tipoVacante" className="block text-sm font-medium text-gray-600">
-                          Tipo de Vacante
-                        </label>
-                        <input
-                          type="text"
-                          id="tipoVacante"
-                          name="tipoVacante"
-                          value={tipoVacante}
-                          onChange={(e) => setTipoVacante(e.target.value)}
-                          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                          required
-                        />
-                      </div>
+  <label htmlFor="tipoVacante" className="block text-sm font-medium text-gray-600">
+    Tipo de Vacante
+  </label>
+  <select
+    id="tipoVacante"
+    name="tipoVacante"
+    value={tipoVacante}
+    onChange={(e) => setTipoVacante(e.target.value)}
+    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+    required
+  >
+    <option value="">Selecciona una opción</option>
+    <option value="División de Tecnología">División de Tecnología</option>
+    <option value="División de Turismo">División de Turismo</option>
+    <option value="División de Medios">División de Medios</option>
+    <option value="División de Finanzas">División de Finanzas</option>
+  </select>
+</div>
+
                       <div className="mb-4">
                         <label htmlFor="num_telefonico" className="block text-sm font-medium text-gray-600">
                           Número Telefónico
