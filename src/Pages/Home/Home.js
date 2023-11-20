@@ -14,7 +14,7 @@ function Home() {
     <>
     <Header/>
     <div className="w-full h-[1500px] relative overflow-hidden bg-white">
-      <img src={ImagneHome} className="md:w-full xl:w-full absolute hover:shadow-xl active:opacity-75" alt="ImagenHome" />
+      <img src={ImagneHome} className="h-[562px] md:w-full xl:w-full absolute hover:shadow-xl active:opacity-75" alt="ImagenHome" />
 
       <div className="w-full h-[562px] absolute bg-[#0a3857]/[0.47]"/>
     
