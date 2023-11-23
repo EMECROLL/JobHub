@@ -13,7 +13,8 @@ import DashboardHome from './Pages/Dashboard_Home/DashboardHome';
 import DashboardUsuarios from './Pages/Dashboard_Usuarios/DashboardUsuarios';
 import DashboardEmpresas from './Pages/Dashboard_Empresas/DashboardEmpresas';
 import DashboardOfertasLaborales from './Pages/Dashboard_Ofertas/DashboardOfertas';
-
+import Nosotros from './Pages/Nosotros/Nosotros';
+import Contacto from './Pages/Contacto/Contacto';
 
 
 function App() {
@@ -34,8 +35,8 @@ function App() {
           <Route path="/OfertasLaborales" element={<OfertasLaborales />} />
           <Route path="/Vcatalgo/:categoria" element={<Vcatalgo />} />
           <Route path="/informacion/:id" element={<Información />} />
-          {/* <Route path="/Nosotros" element={<Nosotros />} /> */}
-          {/* <Route path="/Contacto" element={<Contacto/>} /> */}
+          <Route path="/Nosotros" element={<Nosotros />} />
+          <Route path="/Contacto" element={<Contacto/>} />
 
           {/* Dashboards */}
           <Route path='/dashboardHome' element={<DashboardHome></DashboardHome>}></Route>

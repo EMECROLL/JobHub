@@ -20,7 +20,7 @@ const Header = () => {
           <ul className="flex flex-col md:flex-row items-center">
             <li className="my-2 md:mx-2">
               <Link to="/">
-                <img src={Logo} alt="Logotipo" className="h-40 mr-4" />
+                <img src={Logo} alt="Logotipo" className="h-20 mr-4" />
               </Link>
             </li>
             <li className="my-2 md:mx-2">
