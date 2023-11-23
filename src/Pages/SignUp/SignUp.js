@@ -8,6 +8,7 @@ import GoogleLogin from 'react-google-login';
 
 function SignUp() {
 
+  const [CURP, setCURP] = useState("")
   const [nombre, setNombre] = useState("")
   const [apellido, setApellido] = useState("")
   const [correo, setCorreo] = useState("")
@@ -17,47 +18,59 @@ function SignUp() {
   const [camposVacios, setCamposVacios] = useState(false);
   const [correoExistente, setCorreoExistente] = useState(false);
   const [contraseniaValida, setContraseniaInvalida] = useState(false);
+  const [CURPInvalido, setCURPInvalido] = useState(false);
 
-  
+  const tokenCURP = "11fd0aa6-987e-4829-ba00-bcabeedd339a"
 
   const registro = async (e) => {
     e.preventDefault();
-
-    //! Validaciones
-    //! Validar que los campos no estén vacíos
-    if (!nombre || !apellido || !correo || !contrasenia || !confirmContrasenia) {
-      setCamposVacios(true);
-      return; //* Detener la función si faltan campos
+  
+    try {
+      const respuesta = await Axios.get(`https://api.valida-curp.com.mx/curp/obtener_datos/?token=${tokenCURP}&curp=${CURP}`);
+  
+      if (respuesta.data.error === false) {
+        
+        //! Validar que los campos no estén vacíos
+        if (!nombre || !apellido || !correo || !contrasenia || !confirmContrasenia) {
+          setCamposVacios(true);
+          return; //* Detener la función si faltan campos
+        }
+  
+        //! Validar que las contraseñas coincidan
+        if (contrasenia !== confirmContrasenia) {
+          setConfirmContrasenia("");
+          setContraseniasNoCoinciden(true);
+          return; //* Detener la función si las contraseñas no coinciden
+        }
+  
+        //! Validar longitud mínima, mayúscula y símbolo en la contraseña
+        const validacionContrasenia = /^(?=.*[A-Z])(?=.*[!@#$%^&?*])(.{8,})$/;
+  
+        if (!validacionContrasenia.test(contrasenia)) {
+          setConfirmContrasenia("");
+          setContraseniaInvalida(true);
+          return;
+        }
+  
+        Axios.post("http://localhost:3001/signup", {
+          nombre: nombre,
+          apellido: apellido,
+          correo: correo.toLowerCase(),
+          contrasenia: contrasenia,
+        })
+          .then(() => {
+            window.location.href = "/login";
+          })
+          .catch((error) => {
+            setCorreoExistente(true);
+          });
+      } else {
+        setCURPInvalido(true);
+      }
+    } catch (error) {
+      setCURPInvalido(true);
     }
-    //! Validar que las contraseñas coincidan
-    if (contrasenia !== confirmContrasenia) {
-        setConfirmContrasenia("");
-        setContraseniasNoCoinciden(true);
-        return; //* Detener la función si las contraseñas no coinciden
-    }
-
-    //! Validar longitud mínima, mayúscula y símbolo en la contraseña
-    const validacionContrasenia = /^(?=.*[A-Z])(?=.*[!@#$%^&?*])(.{8,})$/;
-
-    if (!validacionContrasenia.test(contrasenia)) {
-        setConfirmContrasenia("");
-        setContraseniaInvalida(true)
-        return;
-    }
-
-    Axios.post("http://localhost:3001/signup", {
-    nombre: nombre,
-    apellido: apellido,
-    correo: correo.toLowerCase(),
-    contrasenia: contrasenia,
-  })
-    .then((respuesta) => {
-      window.location.href = "/login";
-    })
-    .catch((error) => {
-      setCorreoExistente(true);
-    });
-  }
+  };
 
 //* ID de cliente de Google Developers
 const clientID = "570667986663-rejfonej86qnv1gov31v1rfvohka5ndk.apps.googleusercontent.com"
@@ -105,6 +118,19 @@ const respuestaGoogleError = () => {
         <div className='h-500'>
         <form>
           <div className="mt-2">
+          <label htmlFor="nombre" className="block text-sm font-medium text-gray-600">
+              CURP:
+            </label>
+            <input
+              onChange={(e) => setCURP(e.target.value)}
+              value={CURP}
+              type="text"
+              id="CURP"
+              name="CURP"
+              className="mt-2 form-input focus:ring-2 focus:ring-blue-500 focus:border-transparent border-gray-300 rounded-md px-3 py-2 text-gray-800"
+              placeholder="PXNE660720HMCXTN06"
+              required
+            />
             <label htmlFor="nombre" className="block text-sm font-medium text-gray-600">
               Nombre(s):
             </label>
@@ -195,6 +221,7 @@ const respuestaGoogleError = () => {
               {camposVacios && <p className='text-red-500 text-sm mt-2'>Por favor, complete todos los campos</p>}
               {correoExistente && <p className='text-red-500 text-sm mt-2'>Correo ya existente. Por favor, inicia sesión</p>}
               {contraseniaValida && <p className='text-red-500 text-sm mt-2'>La contraseña debe tener al menos 8 caracteres, incluir al menos una letra mayúscula y al menos un símbolo</p>}
+              {CURPInvalido && <p className='text-red-500 text-sm mt-2'>La estructura del curp es inválido</p>}
             </div>
           </div>
             <button onClick={registro} className="mx-16 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
