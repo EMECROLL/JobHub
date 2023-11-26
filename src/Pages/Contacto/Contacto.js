@@ -45,9 +45,11 @@ function Contacto() {
         </>
     );
 }
-
+// http://localhost:3001/verformulario
+// http://localhost:3001/enviarformulario
 document.addEventListener("DOMContentLoaded", function () {
     const enviarFormularioBtn = document.getElementById("formulario_enviar");
+    
 
     enviarFormularioBtn.addEventListener("click", function () {
 
@@ -62,9 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
             FormNumero: numero,
             FormCorreo: correo
         };
-
-        console.log(data);
-
+          console.log(document.getElementById("formulario_enviar"));
         fetch('http://localhost:3001/anadirformulario', {
             method: 'POST',
             headers: {
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => response.json())
             .then(result => {
-                console.log('funciona esta cosa', result);
+                console.log('funciona esta cosa, se envio a la base de datos', result);
             })
             .catch(error => console.log('Error al enviar formulario', error));
     });
