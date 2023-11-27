@@ -72,6 +72,16 @@ function Información() {
     }
   };
 
+  const num_telefonico = objectData.num_telefonico;
+  let numeroSinPrefijo = '';
+  if (num_telefonico) {
+    const longitudPrefijo = 3;
+    numeroSinPrefijo = num_telefonico.slice(longitudPrefijo);
+    console.log(numeroSinPrefijo);
+  } else {
+    console.log('El número telefónico es undefined o null.');
+  }
+
   return (
     <>
       <Header />
@@ -85,10 +95,10 @@ function Información() {
           <h1 className="text-3xl font-bold">{objectData.empresa}</h1>
           <h2 className="text-xl font-semibold">{objectData.titulo}</h2>
           <p className="text-gray-600 text-lg">{objectData.descripcion}</p>
-          <Link to={`https://api.whatsapp.com/send?phone=52${objectData.num_telefonico}&text=Me%20gustaría%20obtener%20más%20información%20sobre%20las%20ofertas%20laborales%20de%20la%20empresa:%20${objectData.empresa}`}>
+          <Link to={`https://api.whatsapp.com/send?phone=52${numeroSinPrefijo}&text=Me%20gustaría%20obtener%20más%20información%20sobre%20las%20ofertas%20laborales%20de%20la%20empresa:%20${objectData.empresa}`}>
             <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full flex items-center">
               <BsWhatsapp className="mr-2" />
-              {objectData.num_telefonico}
+              {numeroSinPrefijo}
             </button>
           </Link>
         </div>
