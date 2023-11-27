@@ -4,8 +4,22 @@ import LOGO from './logo.png'
 import { Link } from 'react-router-dom';
 import {gapi} from 'gapi-script';
 import GoogleLogin from 'react-google-login';
+import { ImEyeBlocked } from "react-icons/im";
+import { ImEye } from "react-icons/im";
 
 export default function Login() {
+
+  //* Mensajes de advertencia
+  const [camposVacios, setCamposVacios] = useState(false);
+  const [credencialesIncorrectas, setCredencialesIncorrectas] = useState(false);
+  const [usuarioNoExiste, setUsuarioNoExiste] = useState(false);
+
+  //* Mostrar las contraseñas
+  const [mostrarContrasenia, setMostrarContrasenia] = useState(false);
+
+  const verContrasenia = () => {
+    setMostrarContrasenia(!mostrarContrasenia);
+  };
 
   const [datos, setDatos] = useState({
     correo: '',
@@ -14,13 +28,22 @@ export default function Login() {
 });
 
 const URL = "http://localhost:3001/login";
+const URLGoogle = "http://localhost:3001/loginGoogle";
 
 const iniciarSesion = async (e) => {
     e.preventDefault();
 
     //! Validaciones
+
+    //! Validar no enviar espacios en blanco
+    if (!datos.correo.trim() || !datos.contrasenia.trim()) {
+      setCamposVacios(true);
+      return; //* Detener la función si faltan campos
+    }
+
+    //! Validar que los campos no estén vacíos
     if (!datos.correo || !datos.contrasenia) {
-        console.log('Por favor, complete todos los campos');
+        setCamposVacios(true);
         return; //* Detener la función si faltan campos
     }
 
@@ -44,34 +67,34 @@ const iniciarSesion = async (e) => {
             if (error.response && error.response.data) {
                 //! Si la respuesta del servidor tiene un mensaje de error
                 if (error.response.data.message === "Credenciales incorrectas") {
-                    console.log(error.response.data.message);
+                    setCredencialesIncorrectas(true);
                 } else if (error.response.data.message === "El correo no existe en la base de datos") {
-                    console.log(error.response.data.message);
+                    setUsuarioNoExiste(true);
                 } else {
-                    console.log(error.response.data.message);
+                    alert(error.response.data.message);
                 }
             } else {
                 console.log("Error desconocido:", error);
             }
         });
 }
-//* ID de cliente de Google Developers
-const clientID = "570667986663-rejfonej86qnv1gov31v1rfvohka5ndk.apps.googleusercontent.com"
-
-useEffect(() => {
-    //* Inicializar Google API
-    const iniciar = () => {
-      gapi.auth2.init({
-        clientId: clientID,
-      })
-    }
-    gapi.load("client:auth2", iniciar)
-}, [])
-
-const respuestaGoogleOk = (res) => {
+  //* ID de cliente de Google Developers
+  const clientID = "570667986663-rejfonej86qnv1gov31v1rfvohka5ndk.apps.googleusercontent.com"
+  
+  useEffect(() => {
+      //* Inicializar Google API
+      const iniciar = () => {
+        gapi.auth2.init({
+          clientId: clientID,
+        })
+      }
+      gapi.load("client:auth2", iniciar)
+  }, [])
+  
+  const respuestaGoogleOk = (res) => {
   console.log(res);
 
-  Axios.post(URL, { correo: res.profileObj.email, contrasenia: res.profileObj.googleId })
+  Axios.post(URLGoogle, { correo: res.profileObj.email, contrasenia: res.profileObj.googleId })
         .then(respuesta => {
             if (respuesta.status === 200) {
                 
@@ -118,15 +141,24 @@ const respuestaGoogleError = () => {
             </label>
             <input
               onChange={(e)=>setDatos({...datos,contrasenia:e.target.value})}
-              type="password"
+              type={mostrarContrasenia ? 'text' : 'password'}
               id="password"
               name="password"
               className="mt-2 form-input focus:ring-2 focus:ring-blue-500 focus:border-transparent border-gray-300 rounded-md px-3 py-2 text-gray-800"
               placeholder="Escribe tu contraseña"
             />
+            <button type="button" onClick={verContrasenia} className="mt-2 ml-2 px-3 py-2  rounded-md">
+              {mostrarContrasenia ? <ImEye /> : <ImEyeBlocked />}
+            </button>
             <Link to='/forgetPassword'>
               <h1 className='mb-6 text-blue-700'>Olvidaste tu contraseña?</h1>
             </Link>
+          </div>
+          {/* //* Mensajes de advertencia */}
+          <div className='w-64'>
+              {camposVacios && <p className='text-red-500 text-sm mt-2 py-2'>Por favor, complete todos los campos</p>}
+              {credencialesIncorrectas && <p className='text-red-500 text-sm mt-2 py-2'>Credenciales incorrectas</p>}
+              {usuarioNoExiste && <p className='text-red-500 text-sm mt-2 py-2'>Correo no existente, favor de registrarse</p>}
           </div>
             <button onClick={iniciarSesion} className="mx-20 bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 ">
               Iniciar Sesión

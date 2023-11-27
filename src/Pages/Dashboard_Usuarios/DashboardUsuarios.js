@@ -13,6 +13,7 @@ function DashboardUsuarios() {
   const [correo, setCorreo] = useState("");
   const [contrasenia, setContrasenia] = useState("");
   const [tipoUsuario, setTipoUsuario] = useState("1");
+  const idUsuario = localStorage.getItem("idUsuario")
 
   useEffect(() => {
     mostrarUsuarios();
@@ -238,19 +239,41 @@ function DashboardUsuarios() {
                       <td className="px-4 py-2">{usuario.nombre}</td>
                       <td className="px-4 py-2">{usuario.apellido}</td>
                       <td className="px-4 py-2">{usuario.correo}</td>
-                      <td className="px-4 py-2">{usuario.tipo_usuario === 1 ? "Administrador" : "Usuario Registrado"}</td>
+                      <td className="px-4 py-2">{usuario.tipo_usuario === 1 ? "Administrador" : usuario.tipo_usuario === 2 ? "Usuario Registrado" : "Usuario de Google"}</td>
                       <td className="px-4 py-2">
-                        <button
-                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                          onClick={() => abrirModalActualizar(usuario)}
+                        {
+                        (usuario.id_usuario == idUsuario) ? "" : 
+                        (usuario.tipo_usuario === 1 && usuario.id_usuario != idUsuario) ? 
+                        <>
+                          <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                        onClick={() => abrirModalActualizar(usuario)}
                         >
-                          <FaEdit className="inline-block mr-1" />
-                          Actualizar
+                        <FaEdit className="inline-block mr-1" />
+                        Actualizar
                         </button>
                         <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => eliminarUsuario(usuario.id_usuario)}>
-                          <FaTrash className="inline-block mr-1" />
-                          Eliminar
+                        <FaTrash className="inline-block mr-1" />
+                        Eliminar
                         </button>
+                        </> : 
+                        (usuario.tipo_usuario === 2 && usuario.id_usuario != idUsuario) ? <>
+                          <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                        onClick={() => abrirModalActualizar(usuario)}
+                      >
+                        <FaEdit className="inline-block mr-1" />
+                        Actualizar
+                      </button>
+                      <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => eliminarUsuario(usuario.id_usuario)}>
+                        <FaTrash className="inline-block mr-1" />
+                        Eliminar
+                      </button>
+                        </> : <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => eliminarUsuario(usuario.id_usuario)}>
+                        <FaTrash className="inline-block mr-1" />
+                        Eliminar
+                      </button>
+                        }
                       </td>
                     </tr>
                   ))}
