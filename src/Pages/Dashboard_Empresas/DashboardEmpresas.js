@@ -9,12 +9,14 @@ function Empresas() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [ofertaLaboralSeleccionada, setOfertaLaboralSeleccionada] = useState(null);
   const [empresa, setEmpresa] = useState("");
+  const [descripcionBreve, setDescripcionBreve] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [logo_url, setLogoUrl] = useState("");
   const [imagen_url, setImagenUrl] = useState("");
   const [tipoVacante, setTipoVacante] = useState("");
   const [num_telefonico, setNumTelefonico] = useState("");
-  // const idUsuario = localStorage.getItem('idUsuario');
+  const [numInvalido, setNumInvalido] = useState(false)
+  const [camposVacios, setCamposVacios] = useState(false)
 
   useEffect(() => {
     actualizarOfertasLaborales();
@@ -25,6 +27,29 @@ function Empresas() {
     setOfertaLaboralSeleccionada(null);
     limpiarFormulario();
   };
+
+  const validarNumeroTelefonico = async (numero) => {
+    const apiKey = 'CMy86c/cPLW1Y+PwvQkMLA==S6yCYBs7QK2W0oKB';
+    const url = `https://api.api-ninjas.com/v1/validatephone?number=${numero}`;
+  
+    try {
+      const response = await Axios.get(url, {
+        headers: {
+          'X-Api-Key': apiKey,
+        },
+      });
+  
+      if (response.data.is_valid && response.data.country === 'Mexico') {
+        return true;
+      } else {
+        setNumInvalido(true);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error al validar el número telefónico:', error);
+      return false;
+    }
+  };  
 
   const actualizarOfertasLaborales = () => {
     Axios.get(`http://localhost:3001/api/ofertas-laborales/`)
@@ -64,9 +89,29 @@ function Empresas() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    //! Validaciones
+    //! Validar que los campos no estén vacíos
+    if(!descripcionBreve ||!empresa || !descripcion || !logo_url || !imagen_url || !tipoVacante || !num_telefonico){
+      setCamposVacios(true)
+      return
+    }
 
+    //! Validar que no hay campos en blanco
+    if(!descripcionBreve.trim() || !empresa.trim() || !descripcion.trim() || !logo_url.trim() || !imagen_url.trim() || !tipoVacante.trim() || !num_telefonico.trim()){
+      setCamposVacios(true)
+      return
+    }
+
+    //! Validar el número telefónico antes de continuar
+    const esNumeroMexicano = await validarNumeroTelefonico(num_telefonico);
+  
+    if (!esNumeroMexicano) {
+      return;
+    }
+  
     try {
       await Axios.post(`http://localhost:3001/api/ofertas-laborales/`, {
+        titulo: descripcionBreve,
         empresa: empresa,
         descripcion: descripcion,
         logoUrl: logo_url,
@@ -74,7 +119,7 @@ function Empresas() {
         tipoVacante: tipoVacante,
         num_telefonico: num_telefonico,
       });
-
+  
       setMostrarModal(false);
       limpiarFormulario();
       actualizarOfertasLaborales();
@@ -82,10 +127,34 @@ function Empresas() {
       console.error("Error al agregar oferta laboral:", error);
     }
   };
+  
 
-  const handleActualizarOfertaLaboral = async () => {
+  const handleActualizarOfertaLaboral = async (e) => {
+    e.preventDefault();
+
+    //! Validaciones
+    //! Validar que los campos no estén vacíos
+    if(!empresa || !descripcion || !logo_url || !imagen_url || !tipoVacante || !num_telefonico){
+      setCamposVacios(true)
+      return
+    }
+
+    //! Validar que no hay campos en blanco
+    if(!empresa.trim() || !descripcion.trim() || !logo_url.trim() || !imagen_url.trim() || !tipoVacante.trim() || !num_telefonico.trim()){
+      setCamposVacios(true)
+      return
+    }
+
+    //! Validar el número telefónico antes de continuar
+    const esNumeroMexicano = await validarNumeroTelefonico(num_telefonico);
+  
+    if (!esNumeroMexicano) {
+      return;
+    }
+  
     try {
       await Axios.put(`http://localhost:3001/api/ofertas-laborales/${ofertaLaboralSeleccionada.id}`, {
+        titulo: descripcionBreve,
         empresa: empresa,
         descripcion: descripcion,
         logoUrl: logo_url,
@@ -93,14 +162,16 @@ function Empresas() {
         tipoVacante: tipoVacante,
         num_telefonico: num_telefonico,
       });
-
+  
       setMostrarModal(false);
       limpiarFormulario();
       actualizarOfertasLaborales();
     } catch (error) {
-      console.error("Error al actualizar oferta laboral:", error);
+      console.error("Error al agregar oferta laboral:", error);
     }
   };
+  
+  
 
   const eliminarOfertaLaboral = async (id) => {
     try {
@@ -151,6 +222,19 @@ function Empresas() {
                       </div>
                       <div className="mb-4">
                         <label htmlFor="descripcion" className="block text-sm font-medium text-gray-600">
+                          Ocupación
+                        </label>
+                        <textarea
+                          id="descripcion"
+                          name="descripcion"
+                          value={descripcionBreve}
+                          onChange={(e) => setDescripcionBreve(e.target.value)}
+                          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                          required
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="descripcion" className="block text-sm font-medium text-gray-600">
                           Descripción
                         </label>
                         <textarea
@@ -191,24 +275,24 @@ function Empresas() {
                         />
                       </div>
                       <div className="mb-4">
-  <label htmlFor="tipoVacante" className="block text-sm font-medium text-gray-600">
-    Tipo de Vacante
-  </label>
-  <select
-    id="tipoVacante"
-    name="tipoVacante"
-    value={tipoVacante}
-    onChange={(e) => setTipoVacante(e.target.value)}
-    className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-    required
-  >
-    <option value="">Selecciona una opción</option>
-    <option value="División de Tecnología">División de Tecnología</option>
-    <option value="División de Turismo">División de Turismo</option>
-    <option value="División de Medios">División de Medios</option>
-    <option value="División de Finanzas">División de Finanzas</option>
-  </select>
-</div>
+                      <label htmlFor="tipoVacante" className="block text-sm font-medium text-gray-600">
+                        Tipo de Vacante
+                      </label>
+                      <select
+                        id="tipoVacante"
+                        name="tipoVacante"
+                        value={tipoVacante}
+                        onChange={(e) => setTipoVacante(e.target.value)}
+                        className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        required
+                      >
+                        <option value="">Selecciona una opción</option>
+                        <option value="División de Tecnología">División de Tecnología</option>
+                        <option value="División de Turismo">División de Turismo</option>
+                        <option value="División de Medios">División de Medios</option>
+                        <option value="División de Finanzas">División de Finanzas</option>
+                      </select>
+                    </div>
 
                       <div className="mb-4">
                         <label htmlFor="num_telefonico" className="block text-sm font-medium text-gray-600">
@@ -224,6 +308,11 @@ function Empresas() {
                           required
                         />
                       </div>
+                      {/* //* Mensajes de advertencia */}
+                        <div className='w-64'>
+                          {numInvalido && <p className='text-red-500 text-sm mt-2 py-2'>El número no es de lada mexicana (+52)</p>}
+                          {camposVacios && <p className='text-red-500 text-sm mt-2 py-2'>Por favor complete todos los campos</p>}
+                        </div>
                       <div className="flex justify-end">
                         <button
                           type="button"
