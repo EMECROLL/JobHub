@@ -76,12 +76,14 @@ function Información() {
     <>
       <Header />
       <div className='flex items-center justify-center m-4'>
-        <img src={objectData.logo_url} alt={objectData.empresa} className="flex items-center " />
+        <img src={objectData.logo_url} alt={objectData.empresa} className="w-20 h-20 md:w-48 md:h-48" />
       </div>
-      <div className="flex flex-wrap items-center gap-8 p-2 m-12">
-        <img src={objectData.imagen_url} alt={objectData.empresa} className="max-w-md" />
+      <div className='flex flex-col md:flex-row items-start justify-center m-4'>
+        <div className='mt-4 md:mt-0 md:w-1/4 md:ml-6 md:self-start'>
+        <img src={objectData.imagen_url} alt={objectData.empresa} className="w-full max-w-md" /></div>
 
-        <div>
+        <div className='md:w-1/2 md:ml-6'> 
+        
           <h1 className="text-3xl font-bold">{objectData.empresa}</h1>
           <h2 className="text-xl font-semibold">{objectData.titulo}</h2>
           <p className="text-gray-600 text-lg">{objectData.descripcion}</p>

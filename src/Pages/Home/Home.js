@@ -18,8 +18,8 @@ function Home() {
 
       <div className="w-full h-[562px] absolute bg-[#0a3857]/[0.47]"/>
     
-    <div>
-        <div className="w-[869px] h-[208px] absolute left-[550px] top-[332px] rounded-[50px] bg-[#0a3857]/[0.51]" style={{ boxShadow: "0px 4px 4px 0 rgba(0,0,0,0.25)" }} />
+    <div className='hidden xl:block'>
+        <div className="w-[869px] h-[208px] absolute left-[550px] top-[332px] rounded-[50px] bg-[#0a3857]/[0.51] " style={{ boxShadow: "0px 4px 4px 0 rgba(0,0,0,0.25)" }} />
           <p className="w-[453px] h-[66px] absolute left-[760px] top-[340px] text-5xl font-semibold text-center text-white">
             ¿Qué es JobHub?
           </p>
@@ -59,7 +59,7 @@ function Home() {
       
       
       
-        <div>
+        <div className='hidden xl:block'>
           <p className="w-[auto] h-[66px] absolute left-[408px] top-[1240px] text-5xl font-semibold text-center text-[#0078AB]" >
             ¿Tienes ofertas laborales que ofrecer?
           </p>
