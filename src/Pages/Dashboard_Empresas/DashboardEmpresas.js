@@ -9,17 +9,19 @@ function Empresas() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [ofertaLaboralSeleccionada, setOfertaLaboralSeleccionada] = useState(null);
   const [empresa, setEmpresa] = useState("");
-  const [descripcionBreve, setDescripcionBreve] = useState("");
+  const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [logo_url, setLogoUrl] = useState("");
   const [imagen_url, setImagenUrl] = useState("");
   const [tipoVacante, setTipoVacante] = useState("");
   const [num_telefonico, setNumTelefonico] = useState("");
-  const [numInvalido, setNumInvalido] = useState(false)
-  const [camposVacios, setCamposVacios] = useState(false)
+  const [numInvalido, setNumInvalido] = useState(false);
+  const [camposVacios, setCamposVacios] = useState(false);
+  const [formatoImagen, setFormatoImagen] = useState(false);
+  const [tipoVacanteActual, setTipoVacanteActual] = useState("");
 
   useEffect(() => {
-    actualizarOfertasLaborales();
+    mostrarOfertas();
   }, []);
 
   const abrirModalAgregar = () => {
@@ -51,15 +53,20 @@ function Empresas() {
     }
   };  
 
-  const actualizarOfertasLaborales = () => {
-    Axios.get(`http://localhost:3001/api/ofertas-laborales/`)
+
+  const mostrarOfertas = () => {
+    let apiUrl = "http://localhost:3001/api/ofertas-laborales/";
+    console.log(tipoVacanteActual)
+    if (tipoVacanteActual) {
+      apiUrl += `tipo/${tipoVacanteActual}`;
+    }
+  
+    Axios.get(apiUrl)
       .then((response) => {
-        // Ordenar las ofertas por tipo de vacante antes de actualizar el estado
         const ofertasOrdenadas = response.data.sort((a, b) => {
-          // Puedes ajustar la lógica de comparación según tus necesidades
           return a.tipoVacante.localeCompare(b.tipoVacante);
         });
-
+  
         setOfertasLaborales(ofertasOrdenadas);
       })
       .catch((error) => {
@@ -67,9 +74,18 @@ function Empresas() {
       });
   };
 
+  const cambiarTipoVacante = (nuevoTipo) => {
+    setTipoVacanteActual(nuevoTipo);
+  };
+  useEffect(() => {
+    console.log(tipoVacanteActual);
+    mostrarOfertas();
+  }, [tipoVacanteActual]);
+
   const abrirModalActualizar = (ofertaLaboral) => {
     setMostrarModal(true);
     setOfertaLaboralSeleccionada(ofertaLaboral);
+    setTitulo(ofertaLaboral.titulo);
     setEmpresa(ofertaLaboral.empresa);
     setDescripcion(ofertaLaboral.descripcion);
     setLogoUrl(ofertaLaboral.logo_url);
@@ -79,6 +95,10 @@ function Empresas() {
   };
 
   const limpiarFormulario = () => {
+    setNumInvalido(false)
+    setCamposVacios(false)
+    setFormatoImagen(false)
+    setTitulo("")
     setEmpresa("");
     setDescripcion("");
     setLogoUrl("");
@@ -87,17 +107,52 @@ function Empresas() {
     setNumTelefonico("");
   };
 
+  const validarUrlImagen = async (url) => {
+    const formatoImagenes = /\.(jpeg|jpg|gif|png)$/;
+    if (!formatoImagenes.test(url)) {
+      console.error("La URL no apunta a una imagen válida.");
+      setFormatoImagen(true)
+      return false;
+    }
+  
+    try {
+      const respuesta = await Axios.head(url);
+      if (respuesta.status === 200) {
+        return true;
+      }
+    } catch (error) {
+      console.error("Error al validar la URL de la imagen:", error);
+    }
+  
+    return false;
+  };
+
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     //! Validaciones
+
+    //! Validar la URL del logo antes de continuar
+  const esUrlLogoValida = await validarUrlImagen(logo_url);
+  if (!esUrlLogoValida) {
+    return;
+  }
+
+  //! Validar la URL de la imagen antes de continuar
+  const esUrlImagenValida = await validarUrlImagen(imagen_url);
+  if (!esUrlImagenValida) {
+    return;
+  }
+
     //! Validar que los campos no estén vacíos
-    if(!descripcionBreve ||!empresa || !descripcion || !logo_url || !imagen_url || !tipoVacante || !num_telefonico){
+    if(!titulo ||!empresa || !descripcion || !logo_url || !imagen_url || !tipoVacante || !num_telefonico){
       setCamposVacios(true)
       return
     }
 
     //! Validar que no hay campos en blanco
-    if(!descripcionBreve.trim() || !empresa.trim() || !descripcion.trim() || !logo_url.trim() || !imagen_url.trim() || !tipoVacante.trim() || !num_telefonico.trim()){
+    if(!titulo.trim() || !empresa.trim() || !descripcion.trim() || !logo_url.trim() || !imagen_url.trim() || !tipoVacante.trim() || !num_telefonico.trim()){
       setCamposVacios(true)
       return
     }
@@ -111,7 +166,7 @@ function Empresas() {
   
     try {
       await Axios.post(`http://localhost:3001/api/ofertas-laborales/`, {
-        titulo: descripcionBreve,
+        titulo: titulo,
         empresa: empresa,
         descripcion: descripcion,
         logoUrl: logo_url,
@@ -122,7 +177,7 @@ function Empresas() {
   
       setMostrarModal(false);
       limpiarFormulario();
-      actualizarOfertasLaborales();
+      mostrarOfertas();
     } catch (error) {
       console.error("Error al agregar oferta laboral:", error);
     }
@@ -154,7 +209,7 @@ function Empresas() {
   
     try {
       await Axios.put(`http://localhost:3001/api/ofertas-laborales/${ofertaLaboralSeleccionada.id}`, {
-        titulo: descripcionBreve,
+        titulo: titulo,
         empresa: empresa,
         descripcion: descripcion,
         logoUrl: logo_url,
@@ -165,7 +220,7 @@ function Empresas() {
   
       setMostrarModal(false);
       limpiarFormulario();
-      actualizarOfertasLaborales();
+      mostrarOfertas();
     } catch (error) {
       console.error("Error al agregar oferta laboral:", error);
     }
@@ -176,7 +231,7 @@ function Empresas() {
   const eliminarOfertaLaboral = async (id) => {
     try {
       await Axios.delete(`http://localhost:3001/api/ofertas-laborales/${id}`);
-      actualizarOfertasLaborales();
+      mostrarOfertas();
     } catch (error) {
       console.error("Error al eliminar oferta laboral:", error);
     }
@@ -199,6 +254,26 @@ function Empresas() {
                   <FaPlus className="inline-block mr-1" />
                   Agregar Empresa
                 </button>
+              </div>
+
+              {/* Nuevo campo de selección de tipo de vacante */}
+              <div className="mb-4">
+                <label htmlFor="tipoVacante" className="block text-sm font-medium text-gray-600">
+                  Tipo de Vacante Actual: {tipoVacanteActual || "Todos"}
+                </label>
+                <select
+                  id="tipoVacante"
+                  name="tipoVacante"
+                  value={tipoVacanteActual}
+                  onChange={(e) => cambiarTipoVacante(e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                >
+                  <option value="">Mostrar Todas</option>
+                  <option value="División de Tecnología">División de Tecnología</option>
+                  <option value="División de Turismo">División de Turismo</option>
+                  <option value="División de Medios">División de Medios</option>
+                  <option value="División de Finanzas">División de Finanzas</option>
+                </select>
               </div>
   
               {mostrarModal && (
@@ -227,8 +302,8 @@ function Empresas() {
                         <textarea
                           id="descripcion"
                           name="descripcion"
-                          value={descripcionBreve}
-                          onChange={(e) => setDescripcionBreve(e.target.value)}
+                          value={titulo}
+                          onChange={(e) => setTitulo(e.target.value)}
                           className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                           required
                         />
@@ -251,7 +326,7 @@ function Empresas() {
                           URL del Logo
                         </label>
                         <input
-                          type="text"
+                          type="url"
                           id="logo_url"
                           name="logo_url"
                           value={logo_url}
@@ -265,7 +340,7 @@ function Empresas() {
                           URL de la Imagen
                         </label>
                         <input
-                          type="text"
+                          type="url"
                           id="imagen_url"
                           name="imagen_url"
                           value={imagen_url}
@@ -312,6 +387,7 @@ function Empresas() {
                         <div className='w-64'>
                           {numInvalido && <p className='text-red-500 text-sm mt-2 py-2'>El número no es de lada mexicana (+52)</p>}
                           {camposVacios && <p className='text-red-500 text-sm mt-2 py-2'>Por favor complete todos los campos</p>}
+                          {formatoImagen && <p className='text-red-500 text-sm mt-2 py-2'>El formato de la imagen debe ser PNG o JPG</p>}
                         </div>
                       <div className="flex justify-end">
                         <button
@@ -341,7 +417,8 @@ function Empresas() {
                 <thead>
                   <tr>
                     <th className="px-4 py-2">Empresa</th>
-                    <th className="px-4 py-2">Descripción</th>
+                    <th className="px-4 py-2">Ocupación</th>
+                    {/* <th className="px-4 py-2">Descripción</th> */}
                     <th className="px-4 py-2">Logo</th>
                     <th className="px-4 py-2">Imagen</th>
                     <th className="px-4 py-2">Tipo de Vacante</th>
@@ -353,7 +430,8 @@ function Empresas() {
                   {ofertasLaborales.map((ofertaLaboral, index) => (
                     <tr key={index}>
                       <td className="px-4 py-2">{ofertaLaboral.empresa}</td>
-                      <td className="px-4 py-2">{ofertaLaboral.descripcion}</td>
+                      <td className="px-4 py-2">{ofertaLaboral.titulo}</td>
+                      {/* <td className="px-4 py-2">{ofertaLaboral.descripcion}</td> */}
                       <td className="px-4 py-2">
                         <img src={ofertaLaboral.logo_url} alt="Logo" className="w-12 h-12" />
                       </td>
