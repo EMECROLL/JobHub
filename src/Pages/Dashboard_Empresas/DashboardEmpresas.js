@@ -29,9 +29,6 @@ function Empresas() {
 
   // Nueva función para cambiar de página
   const paginate = pageNumber => setCurrentPage(pageNumber);
-  useEffect(() => {
-    actualizarOfertasLaborales();
-  }, []);
 
   useEffect(() => {
     mostrarOfertas();
@@ -269,7 +266,7 @@ function Empresas() {
                 </button>
               </div>
 
-              {/* Nuevo campo de selección de tipo de vacante */}
+              {/* Nuevo campo de selección de tipo de vacante
               <div className="mb-4">
                 <label htmlFor="tipoVacante" className="block text-sm font-medium text-gray-600">
                   Tipo de Vacante Actual: {tipoVacanteActual || "Todos"}
@@ -287,7 +284,7 @@ function Empresas() {
                   <option value="División de Medios">División de Medios</option>
                   <option value="División de Finanzas">División de Finanzas</option>
                 </select>
-              </div>
+              </div> */}
   
               {mostrarModal && (
                 <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">

@@ -15,8 +15,21 @@ function DashboardOfertasLaborales() {
   const [imagen_url, setImagenUrl] = useState("");
   const [tipoVacante, setTipoVacante] = useState("");
   const [num_telefonico, setNumTelefonico] = useState("");
+  const [numInvalido,setNumInvalido] = useState("")
+  const [tipoVacanteActual, setTipoVacanteActual] = useState(false);
   const idUsuario = localStorage.getItem('idUsuario');
 
+
+  const [currentPage, setCurrentPage] = useState(1); // Estado para mantener el número de página actual
+  const [itemsPerPage] = useState(3); // Cantidad de elementos por página, puedes ajustar esto según tu necesidad
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = ofertasLaborales.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Nueva función para cambiar de página
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+  
   useEffect(() => {
     mostrarOfertas();
   }, []);
