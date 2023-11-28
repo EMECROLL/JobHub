@@ -3,6 +3,8 @@ import Axios from "axios";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import HeaderDash from "../../Components/HeaderDash/HeaderDash";
 import { FaEdit, FaTrash, FaUserPlus } from "react-icons/fa";
+import { ImEyeBlocked } from "react-icons/im";
+import { ImEye } from "react-icons/im";
 
 function DashboardUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -14,6 +16,19 @@ function DashboardUsuarios() {
   const [contrasenia, setContrasenia] = useState("");
   const [tipoUsuario, setTipoUsuario] = useState("1");
   const idUsuario = localStorage.getItem("idUsuario")
+
+  //* Mensajes de advertencia
+  const [correoExistente, setCorreoExistente] = useState(false)
+  const [camposVacios, setCamposVacios] = useState(false)
+  const [usuarioRegistradoOk, setUsuarioRegistradoOk] = useState(false)
+  const [contraseniaInvalida, setContraseniaInvalida] = useState(false)
+
+  //* Mostrar las contraseñas
+  const [mostrarContrasenia, setMostrarContrasenia] = useState(false);
+
+  const verContrasenia = () => {
+    setMostrarContrasenia(!mostrarContrasenia);
+  };
 
   useEffect(() => {
     mostrarUsuarios();
@@ -27,6 +42,7 @@ function DashboardUsuarios() {
 
   const abrirModalActualizar = (usuario) => {
     setMostrarModal(true);
+    setCorreoExistente(false)
     setUsuarioSeleccionado(usuario);
     setNombre(usuario.nombre);
     setApellido(usuario.apellido);
@@ -35,6 +51,10 @@ function DashboardUsuarios() {
   };
 
   const limpiarFormulario = () => {
+    setUsuarioRegistradoOk(false)
+    setContraseniaInvalida(false)
+    setCamposVacios(false)
+    setCorreoExistente(false)
     setNombre("");
     setApellido("");
     setCorreo("");
@@ -45,40 +65,101 @@ function DashboardUsuarios() {
   const enviar = async (e) => {
     e.preventDefault();
 
+    //! Validar no enviar espacios en blanco
+    if (!nombre.trim() || !apellido.trim() || !correo.trim() || !contrasenia.trim()) {
+      setCamposVacios(true);
+      return; //* Detener la función si faltan campos
+    }
+    
+    //! Validar que los campos no estén vacíos
+    if (!nombre || !apellido || !correo || !contrasenia) {
+      setCamposVacios(true);
+      return; //* Detener la función si faltan campos
+    }
+
+    //! Validar longitud mínima, mayúscula y símbolo en la contraseña
+    const validacionContrasenia = /^(?=.*[A-Z])(?=.*[!@#$%^&?*])(.{8,})$/;
+
+    if (!validacionContrasenia.test(contrasenia)) {
+        setContraseniaInvalida(true)
+        setCamposVacios(false);
+        return;
+    }
+
     try {
-      await Axios.post("http://localhost:3001/users", {
-        nombre: nombre,
-        apellido: apellido,
-        correo: correo.toLowerCase(),
-        contrasenia: contrasenia,
-        tipo_usuario: tipoUsuario,
+        const respuesta = await Axios.post("http://localhost:3001/users", {
+            nombre: nombre,
+            apellido: apellido,
+            correo: correo.toLowerCase(),
+            contrasenia: contrasenia,
+            tipo_usuario: tipoUsuario,
+        });
+        console.log(respuesta);
+        setCorreoExistente(false);
+        setCamposVacios(false);
+        setUsuarioRegistradoOk(true);
+
+        setMostrarModal(false);
+        limpiarFormulario();
+        mostrarUsuarios();
+    } catch (error) {
+        if (error.response && error.response.status === 409) {
+            setCorreoExistente(true);
+        } else {
+            console.error("Error al agregar usuario:", error);
+        }
+    }
+};
+
+
+const actualizarUsuario = async (e) => {
+  e.preventDefault();
+
+    //! Validar no enviar espacios en blanco
+    if (!nombre.trim() || !apellido.trim() || !correo.trim()) {
+      setCamposVacios(true);
+      return; //* Detener la función si faltan campos
+    }
+    
+    //! Validar que los campos no estén vacíos
+    if (!nombre || !apellido || !correo) {
+      setCamposVacios(true);
+      return; //* Detener la función si faltan campos
+    }
+
+    // //! Validar longitud mínima, mayúscula y símbolo en la contraseña
+    // const validacionContrasenia = /^(?=.*[A-Z])(?=.*[!@#$%^&?*])(.{8,})$/;
+
+    // if (!validacionContrasenia.test(contrasenia)) {
+    //     setContraseniaInvalida(true)
+    //     setCamposVacios(false);
+    //     return;
+    // }
+    try {
+      const respuesta = await Axios.put(`http://localhost:3001/users/${usuarioSeleccionado.id_usuario}`, {
+          nombre: nombre,
+          apellido: apellido,
+          correo: correo.toLowerCase(),
+          contrasenia: contrasenia,
+          tipo_usuario: tipoUsuario,
       });
+
+      console.log(respuesta);
+      setCorreoExistente(false);
+      setCamposVacios(false);
+      setUsuarioRegistradoOk(true);
 
       setMostrarModal(false);
       limpiarFormulario();
       mostrarUsuarios();
-    } catch (error) {
-      console.error("Error al agregar usuario:", error);
-    }
-  };
-
-  const actualizarUsuario = async () => {
-    try {
-      await Axios.put(`http://localhost:3001/users/${usuarioSeleccionado.id_usuario}`, {
-        nombre: nombre,
-        apellido: apellido,
-        correo: correo.toLowerCase(),
-        contrasenia: contrasenia,
-        tipo_usuario: tipoUsuario,
-      });
-
-      setMostrarModal(false);
-      limpiarFormulario();
-      mostrarUsuarios();
-    } catch (error) {
-      console.error("Error al actualizar usuario:", error);
-    }
-  };
+  } catch (error) {
+      if (error.response && error.response.status === 409) {
+          setCorreoExistente(true);
+      } else {
+          console.error("Error al editar usuario:", error);
+      }
+  }
+};
 
   const mostrarUsuarios = () => {
     Axios.get("http://localhost:3001/users/")
@@ -122,7 +203,7 @@ function DashboardUsuarios() {
               {/* Modal */}
               {mostrarModal && (
               <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
-                <div className="bg-white p-8 rounded-lg shadow-md">
+                <div className="bg-white p-8 rounded-lg shadow-md  w-96">
                   <h2 className="text-2xl mb-4">{usuarioSeleccionado ? "Actualizar Usuario" : "Agregar Usuario"}</h2>
                   <form onSubmit={usuarioSeleccionado ? actualizarUsuario : enviar}>
                     <div className="mb-4">
@@ -184,21 +265,34 @@ function DashboardUsuarios() {
                       />
                     </div>
                     {tipoUsuario === "1" && ( // Mostrar el campo de contraseña solo si el usuario es administrador
-                      <div className="mb-4">
-                        <label htmlFor="contrasenia" className="block text-sm font-medium text-gray-600">
-                          Contraseña
-                        </label>
-                        <input
-                          type="password"
-                          id="contrasenia"
-                          name="contrasenia"
-                          value={contrasenia}
-                          onChange={(e) => setContrasenia(e.target.value)}
-                          className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                          required
-                        />
+                       <div className="mb-4 flex items-center"> {/* Usa flex para alinear el campo y el botón en la misma fila */}
+                       <div className="w-3/4"> {/* Usa w-3/4 para asignar el 75% del ancho para el campo de contraseña */}
+                          <label htmlFor="contrasenia" className="block text-sm font-medium text-gray-600">
+                            Contraseña
+                          </label>
+                          <input
+                            type={mostrarContrasenia ? 'text' : 'password'}
+                            id="contrasenia"
+                            name="contrasenia"
+                            value={contrasenia}
+                            onChange={(e) => setContrasenia(e.target.value)}
+                            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                            required
+                          />
+                        </div>
+                       <div className="w-1/4"> {/* Usa w-1/4 para asignar el 25% del ancho para el botón */}
+                          <button type="button" onClick={verContrasenia} className="mt-2 ml-2 px-3 pt-5 rounded-md">
+                            {mostrarContrasenia ? <ImEye /> : <ImEyeBlocked />}
+                          </button>
+                        </div>
                       </div>
                     )}
+                        <div className="w-64">
+                          {correoExistente && <p className='text-red-500 text-sm mt-2 py-2'>Correo ya existente</p>}
+                          {camposVacios && <p className='text-red-500 text-sm mt-2 py-2'>Todos los campos son obligatorios</p>}
+                          {contraseniaInvalida && <p className='text-red-500 text-sm mt-2 py-2'>La contraseña debe tener al menos 8 caracteres, incluir al menos una letra mayúscula y al menos un símbolo</p>}
+                          {usuarioRegistradoOk && <p className='text-green-500 text-sm mt-2 py-2'>Usuario registrado correctamente</p>}
+                        </div>
                         <div className="flex justify-end">
                         <button
                           type="button"
