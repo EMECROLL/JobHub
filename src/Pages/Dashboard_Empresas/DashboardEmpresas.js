@@ -19,7 +19,7 @@ function Empresas() {
   const [camposVacios, setCamposVacios] = useState(false)
 
   const [currentPage, setCurrentPage] = useState(1); // Estado para mantener el número de página actual
-  const [itemsPerPage] = useState(5); // Cantidad de elementos por página, puedes ajustar esto según tu necesidad
+  const [itemsPerPage] = useState(3); // Cantidad de elementos por página, puedes ajustar esto según tu necesidad
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
