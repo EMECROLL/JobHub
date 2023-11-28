@@ -15,12 +15,8 @@ function DashboardOfertasLaborales() {
   const [imagen_url, setImagenUrl] = useState("");
   const [tipoVacante, setTipoVacante] = useState("");
   const [num_telefonico, setNumTelefonico] = useState("");
-  const [numInvalido, setNumInvalido] = useState(false);
-  const [camposVacios, setCamposVacios] = useState(false);
-  const [formatoImagen, setFormatoImagen] = useState(false);
-  const [tipoVacanteActual, setTipoVacanteActual] = useState("");
-  const idUsuario = localStorage.getItem("idUsuario");
-  
+  const idUsuario = localStorage.getItem('idUsuario');
+
   useEffect(() => {
     mostrarOfertas();
   }, []);
@@ -426,7 +422,7 @@ function DashboardOfertasLaborales() {
                   </tr>
                 </thead>
                 <tbody>
-                  {ofertasLaborales.map((ofertaLaboral, index) => (
+                {currentItems.map((ofertaLaboral, index) => (
                     <tr key={index}>
                       <td className="px-4 py-2">{ofertaLaboral.empresa}</td>
                       <td className="px-4 py-2">{ofertaLaboral.titulo}</td>
@@ -459,10 +455,25 @@ function DashboardOfertasLaborales() {
                   ))}
                 </tbody>
               </table>
-            </div>
+              <div className="pagination">
+              
+        {ofertasLaborales.length > itemsPerPage && (
+          <div className="pagination-list flex">
+            {Array.from({ length: Math.ceil(ofertasLaborales.length / itemsPerPage) }, (_, index) => (
+              <div key={index} className="pagination-item">
+                <button onClick={() => paginate(index + 1)} className="pagination-link items-center px-4 py-2 mx-1 text-gray-500 bg-white rounded-md cursor-not-allowed">
+                  {index + 1}
+                </button>
+              </div>
+            ))}
           </div>
-        </div>
+        )}
       </div>
+      </div>
+    </div>
+    </div>
+    </div>
+
     </>
   );
 }
