@@ -18,6 +18,19 @@ function Empresas() {
   const [numInvalido, setNumInvalido] = useState(false)
   const [camposVacios, setCamposVacios] = useState(false)
 
+  const [currentPage, setCurrentPage] = useState(1); // Estado para mantener el número de página actual
+  const [itemsPerPage] = useState(3); // Cantidad de elementos por página, puedes ajustar esto según tu necesidad
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = ofertasLaborales.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Nueva función para cambiar de página
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+  useEffect(() => {
+    actualizarOfertasLaborales();
+  }, []);
+
   useEffect(() => {
     actualizarOfertasLaborales();
   }, []);
@@ -350,7 +363,7 @@ function Empresas() {
                   </tr>
                 </thead>
                 <tbody>
-                  {ofertasLaborales.map((ofertaLaboral, index) => (
+                {currentItems.map((ofertaLaboral, index)=> (
                     <tr key={index}>
                       <td className="px-4 py-2">{ofertaLaboral.empresa}</td>
                       <td className="px-4 py-2">{ofertaLaboral.descripcion}</td>
@@ -382,6 +395,20 @@ function Empresas() {
                   ))}
                 </tbody>
               </table>
+              <div className="pagination">
+              
+              {ofertasLaborales.length > itemsPerPage && (
+                <div className="pagination-list flex">
+                  {Array.from({ length: Math.ceil(ofertasLaborales.length / itemsPerPage) }, (_, index) => (
+                    <div key={index} className="pagination-item">
+                      <button onClick={() => paginate(index + 1)} className="pagination-link items-center px-4 py-2 mx-1 text-gray-500 bg-white rounded-md cursor-not-allowed">
+                        {index + 1}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             </div>
           </div>
         </div>

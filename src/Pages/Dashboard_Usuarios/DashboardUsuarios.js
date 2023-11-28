@@ -14,10 +14,22 @@ function DashboardUsuarios() {
   const [contrasenia, setContrasenia] = useState("");
   const [tipoUsuario, setTipoUsuario] = useState("1");
   const idUsuario = localStorage.getItem("idUsuario")
+  const [currentPage, setCurrentPage] = useState(1); // Estado para mantener el número de página actual
+  const [itemsPerPage] = useState(5); // Cantidad de elementos por página, puedes ajustar esto según tu necesidad
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = usuarios.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Nueva función para cambiar de página
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+  
   useEffect(() => {
     mostrarUsuarios();
-  }, []);
+  }, [currentPage]); // Actualiza la lista de usuarios cada vez que cambia la página actual
+  
 
   const abrirModalAgregar = () => {
     setMostrarModal(true);
@@ -234,7 +246,7 @@ function DashboardUsuarios() {
                   </tr>
                 </thead>
                 <tbody>
-                  {usuarios.map((usuario, index) => (
+                {currentItems.map((usuario, index) => (
                     <tr key={index}>
                       <td className="px-4 py-2">{usuario.nombre}</td>
                       <td className="px-4 py-2">{usuario.apellido}</td>
@@ -242,8 +254,8 @@ function DashboardUsuarios() {
                       <td className="px-4 py-2">{usuario.tipo_usuario === 1 ? "Administrador" : usuario.tipo_usuario === 2 ? "Usuario Registrado" : "Usuario de Google"}</td>
                       <td className="px-4 py-2">
                         {
-                        (usuario.id_usuario == idUsuario) ? "" : 
-                        (usuario.tipo_usuario === 1 && usuario.id_usuario != idUsuario) ? 
+                        (usuario.id_usuario === idUsuario) ? "" : 
+                        (usuario.tipo_usuario === 1 && usuario.id_usuario !== idUsuario) ? 
                         <>
                           <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
@@ -257,7 +269,7 @@ function DashboardUsuarios() {
                         Eliminar
                         </button>
                         </> : 
-                        (usuario.tipo_usuario === 2 && usuario.id_usuario != idUsuario) ? <>
+                        (usuario.tipo_usuario === 2 && usuario.id_usuario !== idUsuario) ? <>
                           <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                         onClick={() => abrirModalActualizar(usuario)}
@@ -279,6 +291,26 @@ function DashboardUsuarios() {
                   ))}
                 </tbody>
               </table>
+              
+              <div className="pagination">
+  {usuarios.length > itemsPerPage && (
+    <div className="pagination-list flex">
+      {Array.from({ length: Math.ceil(usuarios.length / itemsPerPage) }, (_, index) => (
+        <div key={index} className="pagination-item">
+          <button
+            onClick={() => paginate(index + 1)}
+            className={`pagination-link items-center px-4 py-2 mx-1 rounded-md ${
+              currentPage === index + 1 ? 'bg-gray-500 text-white' : 'text-gray-500 bg-white cursor-pointer'
+            }`}
+          >
+            {index + 1}
+          </button>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
             </div>
           </div>
         </div>
